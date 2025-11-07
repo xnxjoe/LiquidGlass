@@ -315,7 +315,7 @@ LiquidGlass 使用 MIT 许可证。更多信息请查看 [LICENSE](LICENSE) 文�
 
 ## 🙏 致谢
 
-- 使用 SwiftUI 用 ❤️ 构建
+- 使用 SwiftUI 用 Xcode 和 Github Copilot 构建
 - 灵感来自现代玻璃态设计趋势
 - 感谢 Swift 社区的反馈和贡献
 

@@ -275,7 +275,7 @@ LiquidGlass is available under the MIT license. See the [LICENSE](LICENSE) file 
 
 ## 🙏 Acknowledgments
 
-- Built with Xcode using SwiftUI
+- Built with Xcode and Github Copilot using SwiftUI
 - Inspired by new Liquid Glass Design by Apple Inc.
 
 ## 📬 Contact

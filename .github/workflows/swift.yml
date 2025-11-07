@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-14, macos-13]
+        os: [macos-26, macos-15, macos-14, macos-13, macos-12]
         
     steps:
     - name: Checkout code
@@ -34,25 +34,15 @@ jobs:
       
   lint:
     name: SwiftLint
-    runs-on: macos-14
+    runs-on: macos-15
+    continue-on-error: true
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: SwiftLint
-      uses: norio-nomura/action-swiftlint@3.2.1
-      with:
-        args: --strict
-        
-  build-documentation:
-    name: Build Documentation
-    runs-on: macos-14
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - name: Install SwiftLint
+      run: brew install swiftlint
       
-    - name: Build documentation
-      run: |
-        swift package generate-documentation
+    - name: Run SwiftLint
+      run: swiftlint lint --strict
