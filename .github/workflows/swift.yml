@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-26, macos-15, macos-14, macos-13, macos-12]
+        os: [macos-15, macos-14, macos-13]
         
     steps:
     - name: Checkout code
@@ -21,7 +21,7 @@ jobs:
     - name: Set up Swift
       uses: swift-actions/setup-swift@v1
       with:
-        swift-version: "6.2"
+        swift-version: "5.9"
         
     - name: Print Swift version
       run: swift --version

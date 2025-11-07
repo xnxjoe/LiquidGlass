@@ -98,7 +98,7 @@ public struct GlassStyle: View {
             gradient: Gradient(colors: [
                 strokeColor.opacity(0.5),
                 strokeColor.opacity(0.2),
-                strokeColor.opacity(0.4),
+                strokeColor.opacity(0.4)
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -114,7 +114,7 @@ public struct GlassStyle: View {
         LinearGradient(
             gradient: Gradient(colors: [
                 strokeColor.opacity(0.0),
-                strokeColor.opacity(0.1),
+                strokeColor.opacity(0.1)
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
