@@ -1,0 +1,63 @@
+# SwiftLint Configuration for LiquidGlass
+
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+
+opt_in_rules:
+  - empty_count
+  - closure_spacing
+  - explicit_init
+  - first_where
+  - sorted_imports
+  - vertical_whitespace_closing_braces
+
+excluded:
+  - .build
+  - .swiftpm
+  - Packages
+  - DerivedData
+  - Tests/LinuxMain.swift
+
+# Line Length
+line_length:
+  warning: 120
+  error: 150
+  ignores_comments: true
+  ignores_urls: true
+
+# Type Name
+type_name:
+  min_length: 3
+  max_length: 50
+
+# Identifier Name
+identifier_name:
+  min_length: 2
+  max_length: 50
+  excluded:
+    - id
+    - x
+    - y
+
+# Function Body Length
+function_body_length:
+  warning: 50
+  error: 100
+
+# File Length
+file_length:
+  warning: 500
+  error: 1000
+
+# Type Body Length
+type_body_length:
+  warning: 300
+  error: 400
+
+# Nesting
+nesting:
+  type_level: 2
+  function_level: 3
+
+reporter: "xcode"
