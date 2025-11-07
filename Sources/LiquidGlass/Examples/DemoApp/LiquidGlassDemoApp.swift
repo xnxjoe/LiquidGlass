@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@main
+// @main
 struct LiquidGlassDemoApp: App {
     var body: some Scene {
         WindowGroup {
