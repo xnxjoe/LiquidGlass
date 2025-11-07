@@ -47,11 +47,11 @@ public struct GlassStyle: View {
     // MARK: - Computed colors
 
     /// Effective base color (tint or accent)
-    private var color: Color { tintColor ?? .accentColor }
+    private var color: Color { tintColor ?? ( colorScheme == .dark ? .black : .white) }
 
     /// Slight bright/dark highlight depending on environment
     private var highlightColor: Color {
-        colorScheme == .dark ? .black.opacity(0.65) : .white.opacity(0.7)
+        colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.9)
     }
 
     /// Shadow color tuned for light/dark modes
@@ -62,7 +62,7 @@ public struct GlassStyle: View {
     /// Stroke base color (thin white-ish strokes in either mode)
     private var strokeColor: Color {
         tintColor?.opacity(0.3) ??
-        (colorScheme == .dark ? Color.gray.opacity(0.6) : Color.white.opacity(0.9))
+        (colorScheme == .dark ? Color.gray.opacity(0.25) : Color.white)
     }
 
     // MARK: - Gradients and styles
@@ -71,9 +71,9 @@ public struct GlassStyle: View {
     private var tintGradient: LinearGradient {
         LinearGradient(
             gradient: Gradient(colors: [
-                color.opacity(0.1),
-                color.opacity(0.12),
-                color.opacity(0.1)
+                color.opacity(0.005),
+                color.opacity(0.012),
+                color.opacity(0.008)
             ]),
             startPoint: .topTrailing,
             endPoint: .bottomLeading
