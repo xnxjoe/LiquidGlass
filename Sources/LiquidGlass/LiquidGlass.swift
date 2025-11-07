@@ -31,7 +31,9 @@ public struct GlassStyle: View {
     // MARK: - Initializer
 
     /// Create a glass style for the provided `BackgroundShape`.
-    /// - Parameter shape: the target `BackgroundShape` to render.
+    /// - Parameters:
+    ///   - shape: the target `BackgroundShape` to render.
+    ///   - opacity: the opacity level for the glass effect (default: 0.6).
     public init(shape: BackgroundShape, opacity: CGFloat = 0.6) {
         self.shape = shape
         self.opacity = opacity
