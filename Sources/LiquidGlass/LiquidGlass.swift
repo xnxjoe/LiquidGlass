@@ -25,13 +25,16 @@ public struct GlassStyle: View {
 
     /// Underlying shape to style (rounded rect, capsule, or circle)
     private let shape: BackgroundShape
+    
+    private let opacity: CGFloat
 
     // MARK: - Initializer
 
     /// Create a glass style for the provided `BackgroundShape`.
     /// - Parameter shape: the target `BackgroundShape` to render.
-    public init(shape: BackgroundShape) {
+    public init(shape: BackgroundShape, opacity: CGFloat = 0.6) {
         self.shape = shape
+        self.opacity = opacity
     }
 
     // MARK: - Fluent API
@@ -47,11 +50,14 @@ public struct GlassStyle: View {
     // MARK: - Computed colors
 
     /// Effective base color (tint or accent)
-    private var color: Color { tintColor ?? ( colorScheme == .dark ? .black : .white) }
+    private var color: Color {
+//        tintColor ?? ( colorScheme == .dark ? .black : .white)
+        tintColor ?? .accentColor
+    }
 
     /// Slight bright/dark highlight depending on environment
     private var highlightColor: Color {
-        colorScheme == .dark ? .black.opacity(0.4) : .white.opacity(0.9)
+        colorScheme == .dark ? .black.opacity(0.7 * opacity) : .white.opacity(0.9 * opacity)
     }
 
     /// Shadow color tuned for light/dark modes
