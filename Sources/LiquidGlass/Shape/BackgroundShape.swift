@@ -21,7 +21,7 @@ public enum BackgroundShape: Sendable {
     case capsule
 
     /// Convenience `Shape` wrapper for the enum value.
-    var shape: CustomShape { CustomShape(shape: self) }
+    public var shape: CustomShape { CustomShape(shape: self) }
 }
 
 // MARK: - CustomShape
@@ -29,11 +29,11 @@ public enum BackgroundShape: Sendable {
 /// Internal `Shape` implementation that maps `BackgroundShape` cases to SwiftUI `Shape`
 /// primitives where possible. Delegating to the standard shapes reduces code surface and
 /// benefits from internal optimizations in the framework.
-struct CustomShape: Shape {
+public struct CustomShape: Shape {
     /// Underlying enum value
     let shape: BackgroundShape
 
-    func path(in rect: CGRect) -> Path {
+    public func path(in rect: CGRect) -> Path {
         switch shape {
         case .roundedRect(let cornerRadius):
             // Clamp the corner radius so it never exceeds half the smallest dimension.
