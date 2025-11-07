@@ -253,7 +253,6 @@ private extension GlassStyle {
     HStack {
         group
     }
-    
     .padding(40)
     .background(
         LinearGradient(

@@ -21,7 +21,7 @@ public struct GlassEffectModifier: ViewModifier {
     // MARK: - Properties
     
     /// The underlying background shape (roundedRect, circle, capsule)
-    private let shape_: BackgroundShape
+    private let shape: BackgroundShape
     
     /// Optional identifier for matched geometry glass effects (Platform 26+)
     private let id: String?
@@ -43,21 +43,21 @@ public struct GlassEffectModifier: ViewModifier {
     ///   - hoverEffect: If `true`, displays a subtle fill on pointer hover. Default is `false`.
     ///   - id: Optional identifier for matched geometry effects (iOS 26+).
     ///   - namespace: Optional namespace for matched geometry effects (iOS 26+).
-    init(
+    public init(
         shape: BackgroundShape,
         hoverEffect: Bool = false,
         id: String? = nil,
         namespace: Namespace.ID? = nil
     ) {
-        self.shape_ = shape
+        self.shape = shape
         self.id = id
         self.namespace = namespace
         self.hoverEffect = hoverEffect
     }
     
     /// Convenience computed property to convert `BackgroundShape` to `Shape`
-    private var shape: some Shape {
-        shape_.shape
+    private var containerShape: some Shape {
+        shape.shape
     }
     
     // MARK: - Body
@@ -69,17 +69,17 @@ public struct GlassEffectModifier: ViewModifier {
                 if let id = id, let namespace = namespace {
                     // Apply matched geometry glass effect with ID
                     content
-                        .glassEffect(in: shape)
+                        .glassEffect(in: containerShape)
                         .glassEffectID(id, in: namespace)
                 } else {
                     // Apply glass effect without matched geometry
                     content
-                        .glassEffect(in: shape)
+                        .glassEffect(in: containerShape)
                 }
             } else {
                 // Fallback to custom glass style for earlier OS versions
                 content
-                    .background(GlassStyle(shape: shape_))
+                    .background(GlassStyle(shape: shape))
             }
         }
         // Track hover state if hover effect is enabled
@@ -92,7 +92,7 @@ public struct GlassEffectModifier: ViewModifier {
         }
         // Show a subtle fill on hover when enabled
         .background(
-            shape.fill(
+            containerShape.fill(
                 hoverEffect && onHover ? AnyShapeStyle(.quaternary) : AnyShapeStyle(.clear)
             )
         )
