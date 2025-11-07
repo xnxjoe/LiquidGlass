@@ -21,7 +21,7 @@ jobs:
     - name: Set up Swift
       uses: swift-actions/setup-swift@v1
       with:
-        swift-version: "5.9"
+        swift-version: "6.2"
         
     - name: Print Swift version
       run: swift --version
