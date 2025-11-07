@@ -150,7 +150,3 @@ struct CardItem: Identifiable {
     let description: String
     let color: Color
 }
-
-#Preview {
-    CardsListView()
-}

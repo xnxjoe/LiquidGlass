@@ -82,6 +82,3 @@ struct ShapesGalleryView: View {
     }
 }
 
-#Preview {
-    ShapesGalleryView()
-}

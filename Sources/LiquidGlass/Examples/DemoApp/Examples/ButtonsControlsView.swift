@@ -144,6 +144,3 @@ struct ButtonsControlsView: View {
     }
 }
 
-#Preview {
-    ButtonsControlsView()
-}
