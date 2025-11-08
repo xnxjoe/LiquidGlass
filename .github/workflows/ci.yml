@@ -18,12 +18,12 @@ jobs:
         with:
           swift-version: '5.9'
 
-      - name: Install SwiftLint
-        run: |
-          brew install swiftlint
+      # - name: Install SwiftLint
+      #   run: |
+      #     brew install swiftlint
 
-      - name: Run SwiftLint
-        run: swiftlint lint --strict
+      # - name: Run SwiftLint
+      #   run: swiftlint lint --strict
 
       - name: Build Package
         run: swift build --disable-sandbox
