@@ -9,9 +9,7 @@
 
 [English](README.md) | 简体中文
 
-<p align="center">
-  <img src=".github/assets/Liquid _Glass_Demo.png" alt="LiquidGlass 预览" width="600">
-</p>
+![LiquidGlass 预览](.github/assets/Liquid _Glass_Demo.png)
 
 ## ✨ 特性
 
@@ -38,9 +36,11 @@
 
 1. 文件 > 添加包依赖项...
 2. 输入仓库地址：
-   ```
-   https://github.com/xnxjoe/LiquidGlass.git
-   ```
+
+    ```text
+    https://github.com/xnxjoe/LiquidGlass.git
+    ```
+
 3. 选择要使用的版本或分支
 4. 点击"添加包"
 
@@ -124,6 +124,7 @@ func liquidGlass(
 ```
 
 **参数：**
+
 - `shape` - 背景形状（`.roundedRect()`、`.circle` 或 `.capsule`）
 - `hoverEffect` - 启用悬停交互（默认：`false`）
 - `id` - 匹配几何效果的可选标识符（iOS 26+）
@@ -233,10 +234,8 @@ VStack(spacing: 20) {
 
 LiquidGlass 自动适配亮色和暗色模式：
 
-<p align="center">
-  <img src=".github/assets/color-scheme-light.png" alt="浅色模式" width="400">
-  <img src=".github/assets/color-scheme-dark.png" alt="深色模式" width="400">
-</p>
+![浅色模式](.github/assets/color-scheme-light.png)
+![深色模式](.github/assets/color-scheme-dark.png)
 
 ```swift
 // 在浅色和深色模式下都很好看
@@ -280,6 +279,7 @@ swift test --verbose
 ```
 
 测试套件包括：
+
 - BackgroundShape 路径生成测试
 - GlassStyle 初始化和色调测试
 - View 扩展集成测试
@@ -293,21 +293,24 @@ swift test --verbose
 ### 开发设置
 
 1. 克隆仓库：
-   ```bash
-   git clone https://github.com/xnxjoe/LiquidGlass.git
-   cd LiquidGlass
-   ```
+
+    ```bash
+    git clone https://github.com/xnxjoe/LiquidGlass.git
+    cd LiquidGlass
+    ```
 
 2. 在 Xcode 中打开：
-   ```bash
-   open Package.swift
-   ```
+
+    ```bash
+    open Package.swift
+    ```
 
 3. 构建和测试：
-   ```bash
-   swift build
-   swift test
-   ```
+
+    ```bash
+    swift build
+    swift test
+    ```
 
 ## 📄 许可证
 

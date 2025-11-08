@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test-docs-lint:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '5.9'
+
+      - name: Install SwiftLint
+        run: |
+          brew install swiftlint
+
+      - name: Run SwiftLint
+        run: swiftlint lint --strict
+
+      - name: Build Package
+        run: swift build --disable-sandbox
+
+      - name: Run Tests
+        run: swift test --disable-sandbox --enable-code-coverage
+
+      - name: Build Documentation
+        run: |
+          swift package --allow-writing-to-directory ./docs generate-documentation --target LiquidGlass --output-path ./docs --disable-sandbox
+
+      - name: Upload code coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage
+          path: .build/debug/codecov/
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: docs/

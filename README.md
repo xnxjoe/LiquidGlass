@@ -9,9 +9,7 @@ A beautiful, lightweight SwiftUI library for creating stunning frosted glass eff
 
 English | [简体中文](README_CN.md)
 
-<p align="center">
-  <img src=".github/assets/Liquid _Glass_Demo.png" alt="Liquid Glass Preview" width="600">
-</p>
+![Liquid Glass Preview](.github/assets/Liquid%20_Glass_Demo.png)
 
 ## ✨ Features
 
@@ -21,7 +19,7 @@ English | [简体中文](README_CN.md)
 - 🖱️ **Hover Effects** - Optional hover interactions for macOS and iPadOS
 - 🔄 **iOS 26+ Integration** - Automatically uses system `glassEffect` API when available
 - 📦 **Lightweight** - Minimal dependencies, pure SwiftUI implementation
-- ⚡ **Performance Optimized** - Efficient path generation and rendering
+- **Performance Optimized** - Efficient path generation and rendering
 - 🌓 **Dark Mode Support** - Automatically adapts to light and dark color schemes
 
 ## 📋 Requirements
@@ -38,9 +36,11 @@ Add LiquidGlass to your project using Xcode:
 
 1. File > Add Package Dependencies...
 2. Enter the repository URL:
-   ```
+
+   ```text
    https://github.com/xnxjoe/LiquidGlass.git
    ```
+
 3. Select the version or branch you want to use
 4. Click "Add Package"
 
@@ -124,6 +124,7 @@ func liquidGlass(
 ```
 
 **Parameters:**
+
 - `shape` - The background shape (`.roundedRect()`, `.circle`, or `.capsule`)
 - `hoverEffect` - Enable hover interaction (default: `false`)
 - `id` - Optional identifier for matched geometry effects (iOS 26+)
@@ -233,10 +234,7 @@ VStack(spacing: 20) {
 
 LiquidGlass automatically adapts to light and dark modes:
 
-<p align="center">
-  <img src=".github/assets/color-scheme-light.png" alt="Light Mode" width="400">
-  <img src=".github/assets/color-scheme-dark.png" alt="Dark Mode" width="400">
-</p>
+![Light Mode](.github/assets/color-scheme-light.png) ![Dark Mode](.github/assets/color-scheme-dark.png)
 
 ```swift
 // Looks great in both light and dark mode
@@ -284,7 +282,8 @@ LiquidGlass is available under the MIT license. See the [LICENSE](LICENSE) file 
 - Issues: [GitHub Issues](https://github.com/xnxjoe/LiquidGlass/issues)
 
 ## 🗺️ Roadmap
-💖- [ ] Additional shape support (polygons, custom paths)
+
+- [ ] Additional shape support (polygons, custom paths)
 - [ ] Animation presets for glass transitions
 - [ ] Accessibility improvements
 - [ ] Documentation website

@@ -28,7 +28,7 @@ let package = Package(
         .target(
             name: "LiquidGlass",
             resources: [
-                .copy("Documentation.docc"),
+                .copy("Documentation.docc")
             ]
         ),
         .testTarget(
