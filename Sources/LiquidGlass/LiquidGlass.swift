@@ -25,7 +25,9 @@ public struct GlassStyle: View {
     /// Underlying shape to style (rounded rect, capsule, or circle)
     private let shape: BackgroundShape
     
-    private let opacity: CGFloat
+    /// The opacity level for the glass effect (default: 0.6).
+    /// Higher values make the glass more opaque, lower values more transparent.
+    private var opacity: CGFloat = 0.6
 
     // MARK: - Initializer
 
@@ -33,15 +35,28 @@ public struct GlassStyle: View {
     /// - Parameters:
     ///   - shape: the target `BackgroundShape` to render.
     ///   - opacity: the opacity level for the glass effect (default: 0.6).
-    public init(shape: BackgroundShape, opacity: CGFloat = 0.6) {
+    ///     Higher values make the glass more opaque, lower values more transparent.
+    public init(shape: BackgroundShape) {
         self.shape = shape
-        self.opacity = opacity
-    }
+    }    
 
     // MARK: - Fluent API
+    
+    /// Return a copy of this style with the specified opacity value.
+    /// - Parameter opacity: The opacity level for the glass effect (default: 0.6).
+    ///   Higher values make the glass more opaque, lower values more transparent.
+    /// - Returns: A new `GlassStyle` with the specified opacity.
+    public func opacity(_ opacity: CGFloat = 0.6) -> GlassStyle {
+        var copy = self
+        copy.opacity = opacity
+        return copy
+    }
 
     /// Return a copy of this style using the provided `tint` color.
     /// - Parameter tint: a `Color` used to tint the subtle overlay gradient.
+    /// - Returns: A new `GlassStyle` with the specified tint color.
+    ///
+    /// The opacity of the glass effect is preserved.
     public func tint(_ tint: Color) -> GlassStyle {
         var copy = self
         copy.tintColor = tint
@@ -58,7 +73,7 @@ public struct GlassStyle: View {
 
     /// Slight bright/dark highlight depending on environment
     private var highlightColor: Color {
-        colorScheme == .dark ? .black.opacity(0.7 * opacity) : .white.opacity(0.9 * opacity)
+        colorScheme == .dark ? .black.opacity(0.7 * opacity) : .white.opacity(1.0 * opacity)
     }
 
     /// Shadow color tuned for light/dark modes

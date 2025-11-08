@@ -31,6 +31,10 @@ public struct GlassEffectModifier: ViewModifier {
     
     /// Whether to show a subtle hover effect on pointer hover
     private let hoverEffect: Bool
+
+    /// The opacity level for the glass effect (default: 0.6).
+    /// Higher values make the glass more opaque, lower values more transparent.
+    private let opacity: CGFloat
     
     /// Tracks current hover state (used when hoverEffect is true)
     @State private var onHover = false
@@ -40,11 +44,14 @@ public struct GlassEffectModifier: ViewModifier {
     /// Create a glass effect modifier.
     /// - Parameters:
     ///   - shape: The `BackgroundShape` to use for the glass background.
+    ///   - opacity: The opacity level for the glass effect (default: 0.6).
+    ///     Higher values make the glass more opaque, lower values more transparent.
     ///   - hoverEffect: If `true`, displays a subtle fill on pointer hover. Default is `false`.
     ///   - id: Optional identifier for matched geometry effects (iOS 26+).
     ///   - namespace: Optional namespace for matched geometry effects (iOS 26+).
     public init(
         shape: BackgroundShape,
+        opacity: CGFloat = 0.6,
         hoverEffect: Bool = false,
         id: String? = nil,
         namespace: Namespace.ID? = nil
@@ -53,6 +60,7 @@ public struct GlassEffectModifier: ViewModifier {
         self.id = id
         self.namespace = namespace
         self.hoverEffect = hoverEffect
+        self.opacity = opacity
     }
     
     /// Convenience computed property to convert `BackgroundShape` to `Shape`
@@ -79,7 +87,10 @@ public struct GlassEffectModifier: ViewModifier {
             } else {
                 // Fallback to custom glass style for earlier OS versions
                 content
-                    .background(GlassStyle(shape: shape))
+                    .background(
+                        GlassStyle(shape: shape)
+                        .opacity(opacity)
+                    )
             }
         }
         // Track hover state if hover effect is enabled
