@@ -7,11 +7,17 @@ on:
     branches: [main]
 
 jobs:
+  soundness:
+    name: Soundness
+    uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
+    with:
+      license_header_check_project_name: "Swift.org"
+
   build-test-docs-lint:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Swift
         uses: swift-actions/setup-swift@v2
@@ -25,11 +31,11 @@ jobs:
       # - name: Run SwiftLint
       #   run: swiftlint lint --strict
 
-      # - name: Build Package
-      #   run: swift build --disable-sandbox
+      - name: Build Package
+        run: swift build --disable-sandbox
 
-      # - name: Run Tests
-      #   run: swift test --disable-sandbox --enable-code-coverage
+      - name: Run Tests
+        run: swift test --disable-sandbox --enable-code-coverage
 
       - name: Build Documentation
         run: |
