@@ -16,7 +16,7 @@ import SwiftUI
 /// rounded corners, creating a dynamic multi-color effect ideal for decorative glass borders.
 ///
 /// - Note: Requires exactly 4 `ShapeStyle` values in the `colors` array for top, right, bottom, and left segments.
-struct MultiColorRoundedRectangle<S: ShapeStyle>: View {
+internal struct MultiColorRoundedRectangle<S: ShapeStyle>: View {
     // MARK: - Properties
     
     /// Corner radius for the rounded rectangle (clamped to fit within the rect)

@@ -77,7 +77,7 @@ struct LiquidGlassExample: View {
                 // MARK: - Tinted Glass Section
                 
                 VStack(alignment: .center, spacing: 20) {
-                    Text("Tinted Glass (Custom GlassStyle)")
+                    Text("Tinted Glass (Custom LiquidGlass)")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .padding(.horizontal)
@@ -88,7 +88,7 @@ struct LiquidGlassExample: View {
                             Text("Blue")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            GlassStyle(shape: .roundedRect(cornerRadius: 12))
+                            LiquidGlass(shape: .roundedRect(cornerRadius: 12))
                                 .tint(.blue)
                                 .frame(width: 80, height: 80)
                         }
@@ -98,7 +98,7 @@ struct LiquidGlassExample: View {
                             Text("Green")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            GlassStyle(shape: .roundedRect(cornerRadius: 12))
+                            LiquidGlass(shape: .roundedRect(cornerRadius: 12))
                                 .tint(.green)
                                 .frame(width: 80, height: 80)
                         }
@@ -108,7 +108,7 @@ struct LiquidGlassExample: View {
                             Text("Pink")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            GlassStyle(shape: .roundedRect(cornerRadius: 12))
+                            LiquidGlass(shape: .roundedRect(cornerRadius: 12))
                                 .tint(.pink)
                                 .frame(width: 80, height: 80)
                         }
@@ -197,9 +197,29 @@ struct DemoBackground: View {
         
     VStack {
         capsuleView
-            .colorScheme(.light)
     }
     .padding(100)
+    .background(
+        DemoBackground()
+    )
+}
+
+#Preview("Shapes") {
+    HStack(spacing: 20) {
+        Text("Rounded Rectangle")
+            .padding(20)
+            .liquidGlass(shape: .roundedRect(cornerRadius: 16))
+        
+        Text("Circle")
+            .padding(20)
+            .liquidGlass(shape: .circle)
+        
+        Text("Capsule")
+            .padding(.horizontal, 30)
+            .padding(.vertical, 15)
+            .liquidGlass(shape: .capsule)
+    }
+    .padding(50)
     .background(
         DemoBackground()
     )

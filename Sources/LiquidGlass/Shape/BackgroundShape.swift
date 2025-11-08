@@ -8,14 +8,11 @@ import SwiftUI
 ///
 /// Use `.shape` to obtain a `Shape` that can be placed into SwiftUI view builders.
 public enum BackgroundShape: Sendable {
-    /// Rounded rectangle with the given corner radius.
-    /// The radius will be clamped to the available rect so the shape stays valid.
+
     case roundedRect(cornerRadius: CGFloat)
 
-    /// A centered circle that fits inside the provided rect.
     case circle
 
-    /// A capsule (pill) shape that fills the provided rect.
     case capsule
 
     /// Convenience `Shape` wrapper for the enum value.

@@ -7,28 +7,26 @@
 
 A beautiful, lightweight SwiftUI library for creating stunning frosted glass effects with customizable shapes and colors.
 
-English | [简体中文](README_CN.md)
+![Liquid Glass Preview](Sources/LiquidGlass/Documentation.docc/Resources/LiquidGlass.png)
 
-![Liquid Glass Preview](.github/assets/Liquid%20_Glass_Demo.png)
+## Features
 
-## ✨ Features
+- Realistic frosted glass effects with gradients and shadows
+- Built-in shapes: rounded rectangles, circles, capsules
+- Customizable color tints
+- Optional hover effects for macOS and iPadOS
+- Automatic use of system `glassEffect` API when available (Platform 26+)
+- Minimal dependencies, pure SwiftUI implementation
+- Performance-optimized rendering
+- Dark mode support
 
-- 🎨 **Beautiful Glass Effects** - Realistic frosted glass with subtle gradients and shadows
-- 🔷 **Multiple Shapes** - Built-in support for rounded rectangles, circles, and capsules
-- 🎭 **Customizable Tints** - Apply any color tint to your glass surfaces
-- 🖱️ **Hover Effects** - Optional hover interactions for macOS and iPadOS
-- 🔄 **Apple OS Platform 26+ Integration** - Automatically uses system `glassEffect` API when available
-- 📦 **Lightweight** - Minimal dependencies, pure SwiftUI implementation
-- **Performance Optimized** - Efficient path generation and rendering
-- 🌓 **Dark Mode Support** - Automatically adapts to light and dark color schemes
-
-## 📋 Requirements
+## Requirements
 
 - iOS 15.0+ / macOS 12.0+
 - Xcode 15.0+
 - Swift 5.9+
 
-## 📦 Installation
+## Installation
 
 ### Swift Package Manager
 
@@ -63,7 +61,7 @@ targets: [
 ]
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Basic Usage
 
@@ -82,20 +80,9 @@ struct ContentView: View {
 }
 ```
 
-### With Custom Tint
-
-Add a colored tint to your glass effect:
-
-```swift
-Text("Colored Glass")
-    .padding(20)
-    .liquidGlass(shape: .capsule)
-    .tint(.blue)
-```
-
 ### Using GlassStyle Directly
 
-For more control, use `GlassStyle` as a background:
+For advanced control, use ``GlassStyle`` as a background:
 
 ```swift
 VStack {
@@ -108,56 +95,13 @@ VStack {
 )
 ```
 
-## 📖 Documentation
+## Documentation
 
-### View Extension
+Full API documentation is available via Swift DocC. See the [Getting Started Documentation](Sources/LiquidGlass/Documentation.docc/GettingStarted.md) for details, symbol links, and advanced usage.
 
-The easiest way to apply glass effects is using the `.liquidGlass()` modifier:
+## Examples
 
-```swift
-func liquidGlass(
-    shape: BackgroundShape,
-    hoverEffect: Bool = false,
-    id: String? = nil,
-    namespace: Namespace.ID? = nil
-) -> some View
-```
-
-**Parameters:**
-
-- `shape` - The background shape (`.roundedRect()`, `.circle`, or `.capsule`)
-- `hoverEffect` - Enable hover interaction (default: `false`)
-- `id` - Optional identifier for matched geometry effects (Platform 26+)
-- `namespace` - Optional namespace for matched geometry effects (Platform 26+)
-
-### BackgroundShape
-
-Choose from three built-in shapes:
-
-```swift
-// Rounded rectangle with custom corner radius
-.liquidGlass(shape: .roundedRect(cornerRadius: 16))
-
-// Perfect circle
-.liquidGlass(shape: .circle)
-
-// Capsule (pill shape)
-.liquidGlass(shape: .capsule)
-```
-
-### GlassStyle
-
-Create standalone glass backgrounds:
-
-```swift
-GlassStyle(shape: .roundedRect(cornerRadius: 12))
-    .tint(.blue)
-    .frame(width: 200, height: 100)
-```
-
-## 💡 Examples
-
-### Card with Glass Background
+### Glass Cards
 
 ```swift
 VStack(alignment: .leading, spacing: 12) {
@@ -165,7 +109,6 @@ VStack(alignment: .leading, spacing: 12) {
         Image(systemName: "sparkles")
             .font(.title2)
             .foregroundStyle(.blue)
-        
         VStack(alignment: .leading, spacing: 4) {
             Text("Glass Card")
                 .font(.headline)
@@ -173,7 +116,6 @@ VStack(alignment: .leading, spacing: 12) {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
-        
         Spacer()
     }
 }
@@ -181,7 +123,7 @@ VStack(alignment: .leading, spacing: 12) {
 .liquidGlass(shape: .roundedRect(cornerRadius: 16))
 ```
 
-### Interactive Button
+### Interactive Elements
 
 ```swift
 Button("Tap Me") {
@@ -192,96 +134,55 @@ Button("Tap Me") {
 .buttonStyle(.plain)
 ```
 
-### Multiple Shapes Gallery
+### Shape Variations
 
 ```swift
 HStack(spacing: 20) {
     GlassStyle(shape: .roundedRect(cornerRadius: 12))
         .tint(.blue)
         .frame(width: 100, height: 100)
-    
     GlassStyle(shape: .circle)
         .tint(.pink)
         .frame(width: 100, height: 100)
-    
     GlassStyle(shape: .capsule)
         .tint(.green)
         .frame(width: 100, height: 60)
 }
 ```
 
-### Custom Tint Colors
+## Color Scheme Adaptation
 
-```swift
-VStack(spacing: 20) {
-    Text("Blue Glass")
-        .liquidGlass(shape: .roundedRect(cornerRadius: 12))
-        .tint(.blue)
-    
-    Text("Purple Glass")
-        .liquidGlass(shape: .roundedRect(cornerRadius: 12))
-        .tint(.purple)
-    
-    Text("Green Glass")
-        .liquidGlass(shape: .roundedRect(cornerRadius: 12))
-        .tint(.green)
-}
-```
+LiquidGlass automatically adapts to light and dark color schemes:
 
-## 🎨 Customization
+![Light Mode](Sources/LiquidGlass/Documentation.docc/Resources/LiquidGlassShape.png) ![Dark Mode](Sources/LiquidGlass/Documentation.docc/Resources/LiquidGlassShape~dark.png)
 
-### Color Schemes
+## Architecture
 
-LiquidGlass automatically adapts to light and dark modes:
+- **BackgroundShape** – Enum defining available shapes with optimized path generation
+- **GlassStyle** – Core view that renders the glass effect with materials and gradients
+- **GlassEffectModifier** – ViewModifier that applies glass backgrounds with Platform 26+ support
+- **View+LiquidGlass** – Convenient extension for easy integration
+- **MultiColorRoundedRectangle/Capsule** – Helper views for multi-gradient strokes
 
-![Light Mode](.github/assets/color-scheme-light.png) ![Dark Mode](.github/assets/color-scheme-dark.png)
+## Contributing
 
-```swift
-// Looks great in both light and dark mode
-Text("Adaptive Glass")
-    .padding()
-    .liquidGlass(shape: .roundedRect(cornerRadius: 16))
-```
+Contributions are welcome! Please submit a Pull Request or open an issue to discuss major changes.
 
-### Hover Effects
-
-Enable interactive hover effects on macOS and iPadOS:
-
-```swift
-Text("Hover Over Me")
-    .padding()
-    .liquidGlass(shape: .capsule, hoverEffect: true)
-```
-
-## 🏗️ Architecture
-
-LiquidGlass is built with a modular architecture:
-
-- **BackgroundShape** - Enum defining available shapes with optimized path generation
-- **GlassStyle** - Core view that renders the glass effect with materials and gradients
-- **GlassEffectModifier** - ViewModifier that applies glass backgrounds with Platform 26+ support
-- **View+LiquidGlass** - Convenient extension for easy integration
-- **MultiColorRoundedRectangle/Capsule** - Helper views for multi-gradient strokes
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-## 📄 License
+## License
 
 LiquidGlass is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Built with Xcode and Github Copilot using SwiftUI
-- Inspired by new Liquid Glass Design by Apple Inc.
+- Built with Xcode and GitHub Copilot using SwiftUI
+- Inspired by Apple's Liquid Glass Design
 
-## 📬 Contact
+## Contact
 
 - GitHub: [@xnxjoe](https://github.com/xnxjoe)
 - Issues: [GitHub Issues](https://github.com/xnxjoe/LiquidGlass/issues)
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [ ] Additional shape support (polygons, custom paths)
 - [ ] Animation presets for glass transitions
@@ -291,7 +192,5 @@ LiquidGlass is available under the MIT license. See the [LICENSE](LICENSE) file 
 - [ ] Community showcase gallery
 
 ---
-
-Made with love by [xnxjoe](https://github.com/xnxjoe)
 
 If you find this package useful, please consider giving it a star on GitHub!

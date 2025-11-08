@@ -16,7 +16,7 @@ import SwiftUI
 /// multi-color effect ideal for decorative glass borders.
 ///
 /// - Note: Requires exactly 4 `ShapeStyle` values in the `colors` array for top, right, bottom, and left segments.
-struct MultiColorCapsule<S: ShapeStyle>: View {
+internal struct MultiColorCapsule<S: ShapeStyle>: View {
     // MARK: - Properties
     
     /// Width of the stroke line

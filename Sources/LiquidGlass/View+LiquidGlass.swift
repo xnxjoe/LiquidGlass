@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - View Extension
 
 public extension View {
-    /// Apply a liquid glass background effect to this view.
+    /// Apply a frosted-glass background effect to SwiftUI view.
     ///
     /// This modifier creates a frosted glass appearance behind the view content.
     /// On Platform 26+, it uses the system `.glassEffect(in:)` API.

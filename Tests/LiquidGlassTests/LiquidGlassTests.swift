@@ -59,32 +59,32 @@ func testBackgroundShapeSendable() async throws {
     #expect(shape is BackgroundShape, "BackgroundShape should be Sendable")
 }
 
-// MARK: - GlassStyle Tests
+// MARK: - LiquidGlass Tests
 
 @MainActor
-@Test("GlassStyle initializes with default values")
+@Test("LiquidGlass initializes with default values")
 func testGlassStyleInitialization() async throws {
-    _ = GlassStyle(shape: .roundedRect(cornerRadius: 12))
+    _ = LiquidGlass(shape: .roundedRect(cornerRadius: 12))
     // Successfully created - no need for nil check on struct
-    #expect(true, "GlassStyle should initialize successfully")
+    #expect(true, "LiquidGlass should initialize successfully")
 }
 
 @MainActor
-@Test("GlassStyle tint creates new instance")
+@Test("LiquidGlass tint creates new instance")
 func testGlassStyleTint() async throws {
-    let original = GlassStyle(shape: .capsule)
+    let original = LiquidGlass(shape: .capsule)
     _ = original.tint(.blue)
     
     // Both instances should exist (structs are always valid)
-    #expect(true, "GlassStyle tint should create modified copy")
+    #expect(true, "LiquidGlass tint should create modified copy")
 }
 
 @MainActor
-@Test("GlassStyle supports all BackgroundShape types")
+@Test("LiquidGlass supports all BackgroundShape types")
 func testGlassStyleShapes() async throws {
-    _ = GlassStyle(shape: .roundedRect(cornerRadius: 16))
-    _ = GlassStyle(shape: .circle)
-    _ = GlassStyle(shape: .capsule)
+    _ = LiquidGlass(shape: .roundedRect(cornerRadius: 16))
+    _ = LiquidGlass(shape: .circle)
+    _ = LiquidGlass(shape: .capsule)
     
     // All styles created successfully
     #expect(true, "Should support all BackgroundShape types")

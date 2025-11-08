@@ -3,17 +3,20 @@
 
 import SwiftUI
 
-/// GlassStyle: A SwiftUI view that renders a frosted-glass background for a ``BackgroundShape``.
+/// A SwiftUI view that renders a frosted-glass background for a ``BackgroundShape``.
 ///
-/// Usage:
-///     GlassStyle(shape: .capsule)
-///         .tint(.blue)
+/// ```swift
+/// LiquidGlass(shape: .capsule)
+///     .tint(.blue)
+///     .opacity(0.8)
+/// ```
 ///
 /// This view composes multiple translucent fills, subtle multi-stop strokes, and a soft shadow
 /// to create a glass-like visual. It is lightweight and keeps the public API minimal:
 /// - `init(shape:)` to create the style for a given ``BackgroundShape``.
 /// - `tint(_:)` to customize the accent/tint color used by subtle gradients.
-public struct GlassStyle: View {
+/// - `opacity(_:)` to customize the hightlight color opacity.
+public struct LiquidGlass: View {
     // MARK: - Stored properties
 
     /// Optional tint color. If not provided, `.accentColor` is used.
@@ -40,22 +43,22 @@ public struct GlassStyle: View {
 
     // MARK: - Fluent API
     
-    /// Return a copy of this style with the specified opacity value.
+    /// Return a modified view with the specified opacity value.
     /// - Parameter opacity: The opacity level for the glass effect (default: 0.6).
     ///   Higher values make the glass more opaque, lower values more transparent.
-    /// - Returns: A new `GlassStyle` with the specified opacity.
-    public func opacity(_ opacity: CGFloat = 0.6) -> GlassStyle {
+    /// - Returns: A new `LiquidGlass` with the specified opacity.
+    public func opacity(_ opacity: CGFloat = 0.6) -> LiquidGlass {
         var copy = self
         copy.opacity = opacity
         return copy
     }
 
-    /// Return a copy of this style using the provided `tint` color.
+    /// Return a modified view using the provided `tint` color.
     /// - Parameter tint: a `Color` used to tint the subtle overlay gradient.
-    /// - Returns: A new `GlassStyle` with the specified tint color.
+    /// - Returns: A new `LiquidGlass` with the specified tint color.
     ///
     /// The opacity of the glass effect is preserved.
-    public func tint(_ tint: Color) -> GlassStyle {
+    public func tint(_ tint: Color) -> LiquidGlass {
         var copy = self
         copy.tintColor = tint
         return copy
@@ -176,7 +179,7 @@ public struct GlassStyle: View {
 }
 
 // MARK: - Stroke gradient helpers
-private extension GlassStyle {
+private extension LiquidGlass {
     // Rounded rectangle stroke gradients — used to create a soft multi-directional stroke
     private var strokeGradient11: LinearGradient {
         LinearGradient(
@@ -255,18 +258,18 @@ private extension GlassStyle {
 
 // MARK: - Preview
 
-#Preview("GlassStyle Examples") {
+#Preview("LiquidGlass Examples") {
     let group = VStack(spacing: 30) {
         // Rounded rectangle with blue tint
-        GlassStyle(shape: .roundedRect(cornerRadius: 16))
+        LiquidGlass(shape: .roundedRect(cornerRadius: 16))
             .frame(width: 200, height: 100)
         
         // Circle with pink tint
-        GlassStyle(shape: .circle)
+        LiquidGlass(shape: .circle)
             .frame(width: 120, height: 120)
         
         // Capsule with green tint
-        GlassStyle(shape: .capsule)
+        LiquidGlass(shape: .capsule)
             .frame(width: 180, height: 60)
     }
     
