@@ -11,7 +11,7 @@ jobs:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
     with:
-      license_header_check_project_name: "Swift.org"
+      license_header_check_project_name: "LiquidGlass"
 
   build-test-docs-lint:
     runs-on: macos-latest
@@ -21,15 +21,15 @@ jobs:
 
       - name: Set up Swift
         uses: swift-actions/setup-swift@v2
-        # with:
-        #   swift-version: '5.9'
+        with:
+          swift-version: '5.9'
 
-      # - name: Install SwiftLint
-      #   run: |
-      #     brew install swiftlint
+      - name: Install SwiftLint
+        run: |
+          brew install swiftlint
 
-      # - name: Run SwiftLint
-      #   run: swiftlint lint --strict
+      - name: Run SwiftLint
+        run: swiftlint lint
 
       - name: Build Package
         run: swift build --disable-sandbox
