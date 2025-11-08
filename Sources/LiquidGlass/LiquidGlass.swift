@@ -3,7 +3,7 @@
 
 import SwiftUI
 
-/// GlassStyle: A SwiftUI view that renders a frosted-glass background for a `BackgroundShape`.
+/// GlassStyle: A SwiftUI view that renders a frosted-glass background for a ``BackgroundShape``.
 ///
 /// Usage:
 ///     GlassStyle(shape: .capsule)
@@ -11,7 +11,7 @@ import SwiftUI
 ///
 /// This view composes multiple translucent fills, subtle multi-stop strokes, and a soft shadow
 /// to create a glass-like visual. It is lightweight and keeps the public API minimal:
-/// - `init(shape:)` to create the style for a given `BackgroundShape`.
+/// - `init(shape:)` to create the style for a given ``BackgroundShape``.
 /// - `tint(_:)` to customize the accent/tint color used by subtle gradients.
 public struct GlassStyle: View {
     // MARK: - Stored properties
@@ -34,8 +34,6 @@ public struct GlassStyle: View {
     /// Create a glass style for the provided `BackgroundShape`.
     /// - Parameters:
     ///   - shape: the target `BackgroundShape` to render.
-    ///   - opacity: the opacity level for the glass effect (default: 0.6).
-    ///     Higher values make the glass more opaque, lower values more transparent.
     public init(shape: BackgroundShape) {
         self.shape = shape
     }    

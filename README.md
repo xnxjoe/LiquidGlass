@@ -17,7 +17,7 @@ English | [简体中文](README_CN.md)
 - 🔷 **Multiple Shapes** - Built-in support for rounded rectangles, circles, and capsules
 - 🎭 **Customizable Tints** - Apply any color tint to your glass surfaces
 - 🖱️ **Hover Effects** - Optional hover interactions for macOS and iPadOS
-- 🔄 **iOS 26+ Integration** - Automatically uses system `glassEffect` API when available
+- 🔄 **Apple OS Platform 26+ Integration** - Automatically uses system `glassEffect` API when available
 - 📦 **Lightweight** - Minimal dependencies, pure SwiftUI implementation
 - **Performance Optimized** - Efficient path generation and rendering
 - 🌓 **Dark Mode Support** - Automatically adapts to light and dark color schemes
@@ -127,8 +127,8 @@ func liquidGlass(
 
 - `shape` - The background shape (`.roundedRect()`, `.circle`, or `.capsule`)
 - `hoverEffect` - Enable hover interaction (default: `false`)
-- `id` - Optional identifier for matched geometry effects (iOS 26+)
-- `namespace` - Optional namespace for matched geometry effects (iOS 26+)
+- `id` - Optional identifier for matched geometry effects (Platform 26+)
+- `namespace` - Optional namespace for matched geometry effects (Platform 26+)
 
 ### BackgroundShape
 
@@ -259,7 +259,7 @@ LiquidGlass is built with a modular architecture:
 
 - **BackgroundShape** - Enum defining available shapes with optimized path generation
 - **GlassStyle** - Core view that renders the glass effect with materials and gradients
-- **GlassEffectModifier** - ViewModifier that applies glass backgrounds with iOS 26+ support
+- **GlassEffectModifier** - ViewModifier that applies glass backgrounds with Platform 26+ support
 - **View+LiquidGlass** - Convenient extension for easy integration
 - **MultiColorRoundedRectangle/Capsule** - Helper views for multi-gradient strokes
 

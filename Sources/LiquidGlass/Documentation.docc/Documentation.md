@@ -4,7 +4,7 @@ A beautiful, lightweight SwiftUI library for creating stunning frosted glass eff
 
 ## Overview
 
-LiquidGlass provides an elegant way to add frosted glass effects to your SwiftUI views with minimal effort. The library automatically adapts to iOS 26+ system APIs while maintaining backward compatibility.
+LiquidGlass provides an elegant way to add frosted glass effects to your SwiftUI views with minimal effort. The library automatically adapts to Platform 26+ system APIs while maintaining backward compatibility.
 
 ### Features
 
@@ -12,7 +12,7 @@ LiquidGlass provides an elegant way to add frosted glass effects to your SwiftUI
 - **Multiple Shapes** - Built-in support for rounded rectangles, circles, and capsules
 - **Customizable Tints** - Apply any color tint to your glass surfaces
 - **Hover Effects** - Optional hover interactions for macOS and iPadOS
-- **iOS 26+ Integration** - Automatically uses system `glassEffect` API when available
+- **Platform 26+ Integration** - Automatically uses system `glassEffect` API when available
 - **Lightweight** - Minimal dependencies, pure SwiftUI implementation
 - **Performance Optimized** - Efficient path generation and rendering
 - **Dark Mode Support** - Automatically adapts to light and dark color schemes

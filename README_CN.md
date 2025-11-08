@@ -17,7 +17,7 @@
 - 🔷 **多种形状** - 内置支持圆角矩形、圆形和胶囊形
 - 🎭 **自定义色调** - 可为玻璃表面应用任何颜色色调
 - 🖱️ **悬停效果** - macOS 和 iPadOS 的可选悬停交互
-- 🔄 **iOS 26+ 集成** - 可用时自动使用系统 `glassEffect` API
+- 🔄 **Platform 26+ 集成** - 可用时自动使用系统 `glassEffect` API
 - 📦 **轻量级** - 零依赖，纯 SwiftUI 实现
 - ⚡ **性能优化** - 高效的路径生成和渲染
 - 🌓 **深色模式支持** - 自动适配亮色和暗色主题
@@ -127,8 +127,8 @@ func liquidGlass(
 
 - `shape` - 背景形状（`.roundedRect()`、`.circle` 或 `.capsule`）
 - `hoverEffect` - 启用悬停交互（默认：`false`）
-- `id` - 匹配几何效果的可选标识符（iOS 26+）
-- `namespace` - 匹配几何效果的可选命名空间（iOS 26+）
+- `id` - 匹配几何效果的可选标识符（Platform 26+）
+- `namespace` - 匹配几何效果的可选命名空间（Platform 26+）
 
 ### BackgroundShape
 
@@ -260,7 +260,7 @@ LiquidGlass 采用模块化架构构建：
 
 - **BackgroundShape** - 定义可用形状的枚举，具有优化的路径生成
 - **GlassStyle** - 使用材质和渐变渲染玻璃效果的核心视图
-- **GlassEffectModifier** - 应用玻璃背景的 ViewModifier，支持 iOS 26+
+- **GlassEffectModifier** - 应用玻璃背景的 ViewModifier，支持 Platform 26+
 - **View+LiquidGlass** - 便捷的扩展，易于集成
 - **MultiColorRoundedRectangle/Capsule** - 用于多渐变描边的辅助视图
 

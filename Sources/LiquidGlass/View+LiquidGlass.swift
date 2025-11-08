@@ -13,7 +13,7 @@ public extension View {
     /// Apply a liquid glass background effect to this view.
     ///
     /// This modifier creates a frosted glass appearance behind the view content.
-    /// On iOS 26+ and macOS 26+, it uses the system `.glassEffect(in:)` API.
+    /// On Platform 26+, it uses the system `.glassEffect(in:)` API.
     /// On earlier OS versions, it falls back to a custom glass implementation.
     ///
     /// Example usage:
@@ -24,12 +24,12 @@ public extension View {
     /// ```
     ///
     /// - Parameters:
-    ///   - shape: The `BackgroundShape` to use (roundedRect, circle, or capsule).
+    ///   - shape: The ``BackgroundShape`` to use (roundedRect, circle, or capsule).
     ///   - opacity: The opacity level for the glass effect (default: 0.6).
     ///     Higher values make the glass more opaque, lower values more transparent.
     ///   - hoverEffect: If `true`, shows a subtle fill on pointer hover. Default is `false`.
-    ///   - id: Optional identifier for matched geometry effects (iOS 26+). Default is `nil`.
-    ///   - namespace: Optional namespace for matched geometry effects (iOS 26+). Default is `nil`.
+    ///   - id: Optional identifier for matched geometry effects (Platform 26+). Default is `nil`.
+    ///   - namespace: Optional namespace for matched geometry effects (Platform 26+). Default is `nil`.
     /// - Returns: A view with a glass background effect applied.
     func liquidGlass(
         shape: BackgroundShape,

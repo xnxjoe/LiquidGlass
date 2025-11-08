@@ -12,7 +12,7 @@ import SwiftUI
 /// A `ViewModifier` that applies a frosted glass background to the modified view.
 ///
 /// On OS Platform 26+, this modifier uses the system's native `.glassEffect(in:)` API.
-/// On earlier OS versions, it falls back to the custom `GlassStyle` implementation.
+/// On earlier OS versions, it falls back to the custom ``GlassStyle`` implementation.
 ///
 /// Optional features:
 /// - **Hover effect**: When enabled, shows a subtle quaternary fill on pointer hover.
@@ -47,8 +47,8 @@ public struct GlassEffectModifier: ViewModifier {
     ///   - opacity: The opacity level for the glass effect (default: 0.6).
     ///     Higher values make the glass more opaque, lower values more transparent.
     ///   - hoverEffect: If `true`, displays a subtle fill on pointer hover. Default is `false`.
-    ///   - id: Optional identifier for matched geometry effects (iOS 26+).
-    ///   - namespace: Optional namespace for matched geometry effects (iOS 26+).
+    ///   - id: Optional identifier for matched geometry effects (Platform 26+).
+    ///   - namespace: Optional namespace for matched geometry effects (Platform 26+).
     public init(
         shape: BackgroundShape,
         opacity: CGFloat = 0.6,
