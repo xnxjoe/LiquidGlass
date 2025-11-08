@@ -1,7 +1,6 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-
 import SwiftUI
 
 /// GlassStyle: A SwiftUI view that renders a frosted-glass background for a `BackgroundShape`.
@@ -18,7 +17,7 @@ public struct GlassStyle: View {
     // MARK: - Stored properties
 
     /// Optional tint color. If not provided, `.accentColor` is used.
-    private var tintColor: Color? = nil
+    private var tintColor: Color?
 
     /// Respect system color scheme for subtle color adjustments.
     @Environment(\.colorScheme) private var colorScheme

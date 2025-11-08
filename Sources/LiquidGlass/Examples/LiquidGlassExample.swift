@@ -195,7 +195,6 @@ struct DemoBackground: View {
         .padding(.vertical, 18)
         .liquidGlass(shape: .capsule)
         
-    
     VStack {
         capsuleView
             .colorScheme(.light)
@@ -204,7 +203,6 @@ struct DemoBackground: View {
     .background(
         DemoBackground()
     )
-    
 }
 
 #Preview("LiquidGlass Gallery") {
@@ -232,6 +230,3 @@ struct DemoBackground: View {
         Text("Preview requires iOS 15+ or macOS 12+")
     }
 }
-
-
-

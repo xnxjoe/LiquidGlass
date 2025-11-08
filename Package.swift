@@ -29,7 +29,6 @@ let package = Package(
             name: "LiquidGlass",
             resources: [
                 .copy("Documentation.docc"),
-                .process("PrivacyInfo.xcprivacy")
             ]
         ),
         .testTarget(

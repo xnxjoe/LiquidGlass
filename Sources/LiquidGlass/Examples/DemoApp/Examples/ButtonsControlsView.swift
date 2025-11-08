@@ -143,4 +143,3 @@ struct ButtonsControlsView: View {
         .ignoresSafeArea()
     }
 }
-

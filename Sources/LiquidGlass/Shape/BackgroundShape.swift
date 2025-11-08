@@ -1,8 +1,6 @@
 //
 //  BackgroundShape.swift
 //  LiquidGlass
-//
-
 
 import SwiftUI
 

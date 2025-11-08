@@ -1,6 +1,6 @@
-import Testing
-import SwiftUI
 @testable import LiquidGlass
+import SwiftUI
+import Testing
 
 // MARK: - BackgroundShape Tests
 
@@ -213,11 +213,9 @@ func testPathGenerationPerformance() async throws {
 @Test("Multiple shape creations are lightweight")
 func testShapeCreationPerformance() async throws {
     // Create multiple shapes to ensure no performance issues
-    for i in 0..<100 {
-        let shape = BackgroundShape.roundedRect(cornerRadius: CGFloat(i % 20))
+    for shapeIndex in 0..<100 {
+        let shape = BackgroundShape.roundedRect(cornerRadius: CGFloat(shapeIndex % 20))
         let path = shape.shape.path(in: CGRect(x: 0, y: 0, width: 100, height: 100))
         #expect(!path.isEmpty, "Shape creation should be lightweight")
     }
 }
-
-

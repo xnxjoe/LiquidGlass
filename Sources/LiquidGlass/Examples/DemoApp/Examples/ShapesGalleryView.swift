@@ -81,4 +81,3 @@ struct ShapesGalleryView: View {
         .ignoresSafeArea()
     }
 }
-
