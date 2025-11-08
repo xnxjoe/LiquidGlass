@@ -97,7 +97,7 @@ VStack {
 
 ## Documentation
 
-Full API documentation is available via Swift DocC. See the [Getting Started Documentation](Sources/LiquidGlass/Documentation.docc/GettingStarted.md) for details, symbol links, and advanced usage.
+Full API documentation is available via Swift DocC. See the [Getting Started](Sources/LiquidGlass/Documentation.docc/GettingStarted.md) for details, symbol links, and advanced usage.
 
 ## Examples
 
@@ -139,13 +139,10 @@ Button("Tap Me") {
 ```swift
 HStack(spacing: 20) {
     GlassStyle(shape: .roundedRect(cornerRadius: 12))
-        .tint(.blue)
         .frame(width: 100, height: 100)
     GlassStyle(shape: .circle)
-        .tint(.pink)
         .frame(width: 100, height: 100)
     GlassStyle(shape: .capsule)
-        .tint(.green)
         .frame(width: 100, height: 60)
 }
 ```
