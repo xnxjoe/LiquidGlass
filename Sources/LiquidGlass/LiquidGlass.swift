@@ -69,7 +69,7 @@ public struct LiquidGlass: View {
     /// Effective base color (tint or accent)
     private var color: Color {
 //        tintColor ?? ( colorScheme == .dark ? .black : .white)
-        tintColor ?? .accentColor
+        tintColor ?? .clear
     }
 
     /// Slight bright/dark highlight depending on environment
