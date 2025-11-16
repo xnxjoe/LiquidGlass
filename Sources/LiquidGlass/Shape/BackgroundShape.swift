@@ -21,9 +21,8 @@ public enum BackgroundShape: Sendable {
 
 // MARK: - CustomShape
 
-/// Internal `Shape` implementation that maps `BackgroundShape` cases to SwiftUI `Shape`
-/// primitives where possible. Delegating to the standard shapes reduces code surface and
-/// benefits from internal optimizations in the framework.
+/// Internal `Shape` implementation that maps ``BackgroundShape`` cases to SwiftUI `Shape`
+/// primitives where possible.
 public struct CustomShape: Shape {
     /// Underlying enum value
     let shape: BackgroundShape

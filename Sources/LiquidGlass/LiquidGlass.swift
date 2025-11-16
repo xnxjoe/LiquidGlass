@@ -74,7 +74,7 @@ public struct LiquidGlass: View {
 
     /// Slight bright/dark highlight depending on environment
     private var highlightColor: Color {
-        colorScheme == .dark ? .black.opacity(0.7 * opacity) : .white.opacity(1.0 * opacity)
+        colorScheme == .dark ? .black.opacity(0.7) : .white.opacity(1.0 * opacity)
     }
 
     /// Shadow color tuned for light/dark modes
@@ -94,9 +94,9 @@ public struct LiquidGlass: View {
     private var tintGradient: LinearGradient {
         LinearGradient(
             gradient: Gradient(colors: [
-                color.opacity(0.005),
-                color.opacity(0.012),
-                color.opacity(0.008)
+                color.opacity(0.1),
+                color.opacity(0.2),
+                color.opacity(0.1)
             ]),
             startPoint: .topTrailing,
             endPoint: .bottomLeading
