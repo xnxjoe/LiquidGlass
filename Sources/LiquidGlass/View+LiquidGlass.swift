@@ -32,7 +32,7 @@ public extension View {
     ///   - namespace: Optional namespace for matched geometry effects (Platform 26+). Default is `nil`.
     /// - Returns: A view with a glass background effect applied.
     func liquidGlass(
-        shape: BackgroundShape,
+        shape: BackgroundShape = .capsule,
         opacity: CGFloat = 0.6,
         hoverEffect: Bool = false,
         id: String? = nil,

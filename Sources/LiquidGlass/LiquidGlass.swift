@@ -68,13 +68,12 @@ public struct LiquidGlass: View {
 
     /// Effective base color (tint or accent)
     private var color: Color {
-//        tintColor ?? ( colorScheme == .dark ? .black : .white)
         tintColor ?? .clear
     }
 
     /// Slight bright/dark highlight depending on environment
     private var highlightColor: Color {
-        colorScheme == .dark ? .black.opacity(0.7) : .white.opacity(1.0 * opacity)
+        colorScheme == .dark ? .black.opacity(0.7 * 0.6 * opacity) : .white.opacity(1.0 * opacity)
     }
 
     /// Shadow color tuned for light/dark modes
@@ -85,22 +84,24 @@ public struct LiquidGlass: View {
     /// Stroke base color (thin white-ish strokes in either mode)
     private var strokeColor: Color {
         tintColor?.opacity(0.3) ??
-        (colorScheme == .dark ? Color.gray.opacity(0.25) : Color.white)
+        (colorScheme == .dark ? Color.gray.opacity(0.3) : Color.white)
     }
 
     // MARK: - Gradients and styles
 
     /// Very subtle tint overlay to give the glass a hint of color.
-    private var tintGradient: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                color.opacity(0.1),
-                color.opacity(0.2),
-                color.opacity(0.1)
-            ]),
-            startPoint: .topTrailing,
-            endPoint: .bottomLeading
-        )
+    private var tintGradient: some ShapeStyle {
+//        let baseColor = color
+//        return LinearGradient(
+//            gradient: Gradient(colors: [
+//                baseColor.opacity(0.1),
+//                baseColor.opacity(0.2),
+//                baseColor.opacity(0.1)
+//            ]),
+//            startPoint: .topTrailing,
+//            endPoint: .bottomLeading
+//        )
+        color.opacity(0.2)
     }
 
     /// A simple highlight color (keeps the shape bright at the top area).
@@ -123,22 +124,27 @@ public struct LiquidGlass: View {
     }
 
     // Opacity constants used across stroke gradients (consistent Double type)
-    private let highOpacity: Double = 0.8
-    private let lowOpacity: Double = 0.3
-
-    /// A faint overlay stroke used to add subtle contouring.
-    private var strokeGradient2: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                strokeColor.opacity(0.0),
-                strokeColor.opacity(0.1)
-            ]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
+    private let highOpacity: Double = 0.7
+    private let lowOpacity: Double = 0.1
 
     // MARK: - View body
+    
+    private func gradient(startAngle: CGFloat, mid1: CGFloat, mid2: CGFloat) -> AngularGradient {
+        let highStroke = strokeColor.opacity(highOpacity)
+        let lowStroke = strokeColor.opacity(lowOpacity)
+        
+        return AngularGradient(
+            stops: [
+                .init(color: highStroke, location: 0),
+                .init(color: lowStroke, location: mid1),
+                .init(color: highStroke, location: 0.5),
+                .init(color: lowStroke, location: mid2),
+                .init(color: highStroke, location: 1)
+            ],
+            center: .center,
+            angle: .radians(startAngle)
+        )
+    }
 
     public var body: some View {
         // Base fill: use a system material to provide the frosted effect, then layer other accents on top.
@@ -155,106 +161,60 @@ public struct LiquidGlass: View {
             }
             // Decorative strokes: vary by shape to match edges
             .overlay {
-                switch shape {
-                case .roundedRect(let cornerRadius):
-                    MultiColorRoundedRectangle(
-                        cornerRadius: cornerRadius,
-                        lineWidth: 1,
-                        colors: [strokeGradient11, strokeGradient12, strokeGradient13, strokeGradient14]
-                    )
-                case .circle:
-                    // Single stroke gradient for circle
-                    shape.shape.stroke(strokeGradient21, lineWidth: 1)
-                case .capsule:
-                    MultiColorCapsule(lineWidth: 1, colors: [strokeGradient31, strokeGradient32, strokeGradient33, strokeGradient34])
+                Group {
+                    switch shape {
+                    case .roundedRect(let r):
+                        GeometryReader { proxy in
+                            shape
+                                .shape
+                                .stroke(
+                                    calculatedGradient(proxy: proxy, radius: r)
+                                )
+                        }
+                    case .circle:
+                        // Single stroke gradient for circle
+                        shape.shape
+                            .stroke(
+                                gradient(startAngle: .pi + .pi / 4, mid1: 0.25, mid2: 0.75)
+                            )
+                    case .capsule:
+                        GeometryReader { proxy in
+                            let r = proxy.size.height / 2
+                            shape
+                                .shape
+                                .stroke(
+                                    calculatedGradient(proxy: proxy, radius: r)
+                                )
+                        }
+                    }
                 }
+                .blendMode(.plusLighter)
             }
-            // A final subtle overlay stroke to blend the edges
-            .overlay {
-                shape.shape.stroke(strokeGradient2, lineWidth: 1).blendMode(.overlay)
-            }
-            // Soft shadow to lift the glass from background
             .shadow(color: shadowColor, radius: 15, x: 0, y: 6)
     }
-}
-
-// MARK: - Stroke gradient helpers
-private extension LiquidGlass {
-    // Rounded rectangle stroke gradients — used to create a soft multi-directional stroke
-    private var strokeGradient11: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(highOpacity), strokeColor.opacity(lowOpacity)]),
-            startPoint: .leading,
-            endPoint: .trailing
-        )
-    }
-
-    private var strokeGradient12: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(lowOpacity), strokeColor.opacity(highOpacity)]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
-
-    private var strokeGradient13: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(highOpacity), strokeColor.opacity(lowOpacity)]),
-            startPoint: .trailing,
-            endPoint: .leading
-        )
-    }
-
-    private var strokeGradient14: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(lowOpacity), strokeColor.opacity(highOpacity)]),
-            startPoint: .bottom,
-            endPoint: .top
-        )
-    }
-
-    // Circle stroke gradient — symmetric fade for circular highlights
-    private var strokeGradient21: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(highOpacity), strokeColor.opacity(0), strokeColor.opacity(highOpacity)]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
-    // Capsule stroke gradients — four-directional gradients similar to rounded rect
-    private var strokeGradient31: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(highOpacity), strokeColor.opacity(0)]),
-            startPoint: .leading,
-            endPoint: .trailing
-        )
-    }
-
-    private var strokeGradient32: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(0), strokeColor.opacity(highOpacity)]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
-
-    private var strokeGradient33: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(highOpacity), strokeColor.opacity(0)]),
-            startPoint: .trailing,
-            endPoint: .leading
-        )
-    }
-
-    private var strokeGradient34: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [strokeColor.opacity(0), strokeColor.opacity(highOpacity)]),
-            startPoint: .bottom,
-            endPoint: .top
-        )
+    
+    private func calculatedGradient(proxy: GeometryProxy, radius: CGFloat) -> AngularGradient {
+        let halfWidth = proxy.size.width / 2
+        let halfHeight = proxy.size.height / 2
+        let d = halfWidth - radius
+        let l = halfHeight - radius
+        let sqrt2 = sqrt(2)
+        
+        let a = sqrt2 * l + radius
+        let b = d - l
+        let t1 = sqrt2 * a
+        let t2 = a * a + b * b + sqrt2 * a * b
+        let alpha = asin(t1 / (2 * sqrt(t2)))
+        
+        let startAngle = CGFloat.pi + alpha
+        let mid = (CGFloat.pi - 2 * alpha) / (2 * CGFloat.pi)
+        let mid2 = 0.5 + mid // Symmetric
+        
+        return gradient(startAngle: startAngle, mid1: mid, mid2: mid2)
     }
 }
+
+
 
 // MARK: - Preview
 

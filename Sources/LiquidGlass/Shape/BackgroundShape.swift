@@ -15,36 +15,75 @@ public enum BackgroundShape: Sendable {
 
     case capsule
 
-    /// Convenience `Shape` wrapper for the enum value.
-    public var shape: CustomShape { CustomShape(shape: self) }
+    public var shape: CustomShape {
+        switch self {
+        case .roundedRect(let cornerRadius):
+            return CustomShape(shape: self, animatableCornerRadius: cornerRadius)
+        case .circle, .capsule:
+            return CustomShape(shape: self)
+        }
+    }
 }
 
-// MARK: - CustomShape
+// MARK: - CustomShape (Insettable, Animatable, Sendable)
+/// Animatable, insettable shape that works with BackgroundShape enum (Sendable)
+public struct CustomShape: InsettableShape, Animatable, Sendable {
+    // MARK: - Properties
+    /// Internal inset amount (animatable)
+    private var insetAmount: CGFloat = 0.0
+    
+    /// Animatable corner radius
+    public var animatableCornerRadius: CGFloat
+    
+    /// The underlying shape type
+    public let shape: BackgroundShape
+    
+    // MARK: - Animatable Data
+    public var animatableData: AnimatablePair<CGFloat, CGFloat> {
+        get { AnimatablePair(insetAmount, animatableCornerRadius) }
+        set {
+            insetAmount = newValue.first
+            animatableCornerRadius = newValue.second
+        }
+    }
+    
+    // MARK: - Initializer
+    /// Create a CustomShape from a BackgroundShape
+    public init(shape: BackgroundShape, animatableCornerRadius: CGFloat = 0) {
+        self.shape = shape
+        self.animatableCornerRadius = animatableCornerRadius
+    }
+    
+    // MARK: - InsettableShape Requirement
+    public func inset(by amount: CGFloat) -> Self {
+        var copy = self
+        copy.insetAmount = max(0, insetAmount + amount)
+        return copy
+    }
 
-/// Internal `Shape` implementation that maps ``BackgroundShape`` cases to SwiftUI `Shape`
-/// primitives where possible.
-public struct CustomShape: Shape {
-    /// Underlying enum value
-    let shape: BackgroundShape
-
+    // MARK: - Shape Requirement
     public func path(in rect: CGRect) -> Path {
+        let insetRect = rect.insetBy(dx: insetAmount, dy: insetAmount)
+        guard insetRect.width > 0, insetRect.height > 0 else { return Path() }
+
         switch shape {
-        case .roundedRect(let cornerRadius):
-            // Clamp the corner radius so it never exceeds half the smallest dimension.
-            let radius = min(cornerRadius, rect.midX, rect.midY)
-            return RoundedRectangle(cornerRadius: radius).path(in: rect)
+        case .roundedRect:
+            let maxRadius = min(insetRect.width, insetRect.height) / 2
+            let radius = min(animatableCornerRadius, maxRadius)
+            return RoundedRectangle(cornerRadius: radius).path(in: insetRect)
 
         case .circle:
-            // Create a centered circle that fits inside `rect` (preserves circle shape even
-            // when rect is not square).
-            let radius = min(rect.midX, rect.midY)
-            let diameter = radius * 2
-            let square = CGRect(x: rect.midX - radius, y: rect.midY - radius, width: diameter, height: diameter)
-            return Path(ellipseIn: square)
+            let size = min(insetRect.width, insetRect.height)
+            let circleRect = CGRect(
+                x: insetRect.midX - size / 2,
+                y: insetRect.midY - size / 2,
+                width: size,
+                height: size
+            )
+            return Path(ellipseIn: circleRect)
 
         case .capsule:
-            // Use the system `Capsule` to generate a pill-like path that fills the rect.
-            return Capsule().path(in: rect)
+            return Capsule().path(in: insetRect)
         }
     }
 }

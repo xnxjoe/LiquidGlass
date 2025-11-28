@@ -37,7 +37,7 @@ public struct GlassEffectModifier: ViewModifier {
     private let opacity: CGFloat
     
     /// Tracks current hover state (used when hoverEffect is true)
-    @State private var onHover = false
+    @State private var onHover: Bool = false
 
     // MARK: - Initializer
     

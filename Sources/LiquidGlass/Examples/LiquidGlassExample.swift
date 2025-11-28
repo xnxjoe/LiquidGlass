@@ -187,7 +187,7 @@ struct DemoBackground: View {
 
 // MARK: - SwiftUI Preview
 
-#Preview("Demo") {
+#Preview("Liquid Glass Demo") {
     let capsuleView = Text("Liquid Glass")
         .font(.largeTitle)
         .fontWeight(.medium)
