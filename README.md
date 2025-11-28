@@ -11,8 +11,8 @@ A stunning, lightweight SwiftUI library for creating frosted glass effects with 
 
 ## Features
 
-- Realistic frosted glass effects with gradients and shadows
-- Built-in shapes: rounded rectangles, circles, capsules
+- Realistic frosted glass effects with highlights and shadows
+- Built-in shapes: rounded rectangle, circle, capsule
 - Customizable color tints
 - Optional hover effects for macOS and iPadOS
 - Automatic use of system `glassEffect` API when available (Platform 26+)
