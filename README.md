@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Swift Package Manager](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager)
 
-A beautiful, lightweight SwiftUI library for creating stunning frosted glass effects with customizable shapes and colors.
+A stunning, lightweight SwiftUI library for creating frosted glass effects with customizable shapes and colors.
 
 ![Liquid Glass Preview](Sources/LiquidGlass/Documentation.docc/Resources/LiquidGlass.png)
 
@@ -159,7 +159,6 @@ LiquidGlass automatically adapts to light and dark color schemes:
 - **GlassStyle** – Core view that renders the glass effect with materials and gradients
 - **GlassEffectModifier** – ViewModifier that applies glass backgrounds with Platform 26+ support
 - **View+LiquidGlass** – Convenient extension for easy integration
-- **MultiColorRoundedRectangle/Capsule** – Helper views for multi-gradient strokes
 
 ## Contributing
 
@@ -173,21 +172,5 @@ LiquidGlass is available under the MIT license. See the [LICENSE](LICENSE) file 
 
 - Built with Xcode and GitHub Copilot using SwiftUI
 - Inspired by Apple's Liquid Glass Design
-
-## Contact
-
-- GitHub: [@xnxjoe](https://github.com/xnxjoe)
-- Issues: [GitHub Issues](https://github.com/xnxjoe/LiquidGlass/issues)
-
-## Roadmap
-
-- [ ] Additional shape support (polygons, custom paths)
-- [ ] Animation presets for glass transitions
-- [ ] Accessibility improvements
-- [ ] Documentation website
-- [ ] Video tutorials and examples
-- [ ] Community showcase gallery
-
----
 
 If you find this package useful, please consider giving it a star on GitHub!
