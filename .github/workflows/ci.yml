@@ -10,7 +10,17 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
+    - name: Set up Swift
+      uses: swift-actions/setup-swift@v2
+      with:
+        swift-version: '5.9'
+    - name: Set up Xcode
+      uses: swift-actions/setup-xcode@v2
+      with:
+        xcode-version: '26.0'
+    - name: Install dependencies
+      run: swift package resolve 
     - name: Build
       run: swift build -v
     - name: Run tests
@@ -21,7 +31,7 @@ jobs:
     with:
       license_header_check_project_name: "LiquidGlass"
 
-  build-test-docs-lint:
+  lint-test:
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -39,27 +49,6 @@ jobs:
       - name: Run SwiftLint
         run: swiftlint lint
 
-      - name: Build Package
-        run: swift build --disable-sandbox
-
-      - name: Run Tests
-        run: swift test --disable-sandbox --enable-code-coverage
-
-      - name: Build Documentation
-        run: |
-          swift package --allow-writing-to-directory ./docs generate-documentation --target LiquidGlass --output-path ./docs --disable-sandbox
-
-      - name: Upload code coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: code-coverage
-          path: .build/debug/codecov/
-
-      - name: Upload documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: documentation
-          path: docs/
   simulator-build-test:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
