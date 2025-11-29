@@ -15,10 +15,6 @@ jobs:
       uses: swift-actions/setup-swift@v2
       with:
         swift-version: '5.9'
-    - name: Set up Xcode
-      uses: swift-actions/setup-xcode@v2
-      with:
-        xcode-version: '26.0'
     - name: Install dependencies
       run: swift package resolve 
     - name: Build
@@ -55,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set Default Scheme
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
