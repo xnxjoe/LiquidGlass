@@ -34,6 +34,7 @@ public extension View {
     func liquidGlass(
         shape: BackgroundShape = .capsule,
         opacity: CGFloat = 0.6,
+        tint: Color? = nil,
         hoverEffect: Bool = false,
         id: String? = nil,
         namespace: Namespace.ID? = nil
@@ -42,6 +43,7 @@ public extension View {
             GlassEffectModifier(
                 shape: shape,
                 opacity: opacity,
+                tint: tint,
                 hoverEffect: hoverEffect,
                 id: id,
                 namespace: namespace

@@ -58,7 +58,7 @@ public struct LiquidGlass: View {
     /// - Returns: A new `LiquidGlass` with the specified tint color.
     ///
     /// The opacity of the glass effect is preserved.
-    public func tint(_ tint: Color) -> LiquidGlass {
+    public func tint(_ tint: Color?) -> LiquidGlass {
         var copy = self
         copy.tintColor = tint
         return copy
@@ -83,8 +83,12 @@ public struct LiquidGlass: View {
 
     /// Stroke base color (thin white-ish strokes in either mode)
     private var strokeColor: Color {
-        tintColor?.opacity(0.3) ??
-        (colorScheme == .dark ? Color.gray.opacity(0.3) : Color.white)
+        if let tintColor = tintColor {
+//            return tintColor.opacity(0.1)
+            return (colorScheme == .dark ? Color.gray.opacity(0.3) : Color.white.opacity(0.2))
+        } else {
+            return (colorScheme == .dark ? Color.gray.opacity(0.3) : Color.white)
+        }
     }
 
     // MARK: - Gradients and styles
@@ -109,19 +113,19 @@ public struct LiquidGlass: View {
         // Returning a Color here is sufficient (conforms to ShapeStyle).
         highlightColor.opacity(0.75)
     }
-
-    /// Slight multi-stop gradient used for some stroke decorations.
-    private var strokeGradient1: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                strokeColor.opacity(0.5),
-                strokeColor.opacity(0.2),
-                strokeColor.opacity(0.4)
-            ]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
+//
+//    /// Slight multi-stop gradient used for some stroke decorations.
+//    private var strokeGradient1: LinearGradient {
+//        LinearGradient(
+//            gradient: Gradient(colors: [
+//                strokeColor.opacity(0.5),
+//                strokeColor.opacity(0.2),
+//                strokeColor.opacity(0.4)
+//            ]),
+//            startPoint: .topLeading,
+//            endPoint: .bottomTrailing
+//        )
+//    }
 
     // Opacity constants used across stroke gradients (consistent Double type)
     private let highOpacity: Double = 0.7

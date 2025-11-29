@@ -36,6 +36,8 @@ public struct GlassEffectModifier: ViewModifier {
     /// Higher values make the glass more opaque, lower values more transparent.
     private let opacity: CGFloat
     
+    private let tint: Color?
+    
     /// Tracks current hover state (used when hoverEffect is true)
     @State private var onHover: Bool = false
 
@@ -52,6 +54,7 @@ public struct GlassEffectModifier: ViewModifier {
     public init(
         shape: BackgroundShape,
         opacity: CGFloat = 0.6,
+        tint: Color? = nil,
         hoverEffect: Bool = false,
         id: String? = nil,
         namespace: Namespace.ID? = nil
@@ -61,6 +64,7 @@ public struct GlassEffectModifier: ViewModifier {
         self.namespace = namespace
         self.hoverEffect = hoverEffect
         self.opacity = opacity
+        self.tint = tint
     }
     
     /// Convenience computed property to convert `BackgroundShape` to `Shape`
@@ -79,10 +83,12 @@ public struct GlassEffectModifier: ViewModifier {
                     content
                         .glassEffect(in: containerShape)
                         .glassEffectID(id, in: namespace)
+                        .tint(tint)
                 } else {
                     // Apply glass effect without matched geometry
                     content
                         .glassEffect(in: containerShape)
+                        .tint(tint)
                 }
             } else {
                 // Fallback to custom glass style for earlier OS versions
@@ -90,6 +96,7 @@ public struct GlassEffectModifier: ViewModifier {
                     .background(
                         LiquidGlass(shape: shape)
                         .opacity(opacity)
+                        .tint(tint)
                     )
             }
         }
