@@ -9,14 +9,15 @@ on:
 jobs:
   build:
     runs-on: macos-26
+    strategy:
+      matrix:
+        version: [ '5.9', '6.0', '6.1', '6.2' ]
     steps:
     - uses: actions/checkout@v5
     - name: Set up Swift
       uses: swift-actions/setup-swift@v2
       with:
-        swift-version: '5.9'
-    - name: Install dependencies
-      run: swift package resolve 
+        swift-version: ${{ matrix.version }}
     - name: Build
       run: swift build -v
     - name: Run tests
