@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
     - uses: actions/checkout@v5
     - name: Set up Swift
@@ -21,6 +21,7 @@ jobs:
       run: swift build -v
     - name: Run tests
       run: swift test -v
+
   soundness:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
@@ -28,7 +29,7 @@ jobs:
       license_header_check_project_name: "LiquidGlass"
 
   lint-test:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -47,7 +48,7 @@ jobs:
 
   simulator-build-test:
     name: Build and Test default scheme using any available iPhone simulator
-    runs-on: macos-latest
+    runs-on: macos-26
 
     steps:
       - name: Checkout
