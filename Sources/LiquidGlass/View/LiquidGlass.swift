@@ -33,15 +33,18 @@ public struct LiquidGlass: View {
     /// The opacity level for the glass effect (default: 0.6).
     /// Higher values make the glass more opaque, lower values more transparent.
     private var opacity: CGFloat = 0.6
+    
+    private let hovering: Bool
 
     // MARK: - Initializer
 
     /// Create a glass style for the provided `BackgroundShape`.
     /// - Parameters:
     ///   - shape: the target `BackgroundShape` to render.
-    public init(shape: BackgroundShape) {
+    public init(shape: BackgroundShape, hovering: Bool = false) {
         self.shape = shape
-    }    
+        self.hovering = hovering
+    }
 
     // MARK: - Fluent API
     
@@ -65,12 +68,11 @@ public struct LiquidGlass: View {
         copy.tintColor = tint
         return copy
     }
-
-    public var body: some View {
-        let baseShape = shape.shape
+    
+    @ViewBuilder
+    private func applyEffect(baseShape: some InsettableShape) -> some View {
         let highlightOpacity = opacity * 0.75
-        let tintOpacity = 0.2 * opacity
-        
+        let tintOpacity = opacity * 0.2
         // Base fill with system material for frosted effect
         baseShape
             .fill(.ultraThinMaterial)
@@ -85,12 +87,28 @@ public struct LiquidGlass: View {
                 baseShape.fill(Color.highlight.opacity(highlightOpacity))
             }
             .overlay {
-                // Decorative stroke with blend mode
-                shape
-                    .highlight(highlighting: Color.stroke, tint: tintColor)
-                    .blendMode(.plusLighter)
+//                if !hovering || colorScheme == .dark {
+                    // Decorative stroke with blend mode
+                GeometryReader { proxy in
+                    baseShape
+                        .stroke(shape.gradient(proxy: proxy, highlighting: Color.stroke, tint: tintColor))
+                        .blendMode(.plusLighter)
+                }
+                   
+//                }
             }
             .shadow(color: Color.shadow, radius: 15, x: 0, y: 6)
+    }
+
+    public var body: some View {
+        switch shape {
+        case .roundedRect(let cornerRadius):
+            applyEffect(baseShape: RoundedRectangle(cornerRadius: cornerRadius))
+        case .circle:
+            applyEffect(baseShape: Circle())
+        case .capsule:
+            applyEffect(baseShape: Capsule())
+        }
     }
 }
 
@@ -98,15 +116,12 @@ public struct LiquidGlass: View {
 
 #Preview("LiquidGlass Examples") {
     let group = VStack(spacing: 30) {
-        // Rounded rectangle with blue tint
         LiquidGlass(shape: .roundedRect(cornerRadius: 16))
             .frame(width: 200, height: 100)
         
-        // Circle with pink tint
         LiquidGlass(shape: .circle)
             .frame(width: 120, height: 120)
         
-        // Capsule with green tint
         LiquidGlass(shape: .capsule)
             .frame(width: 180, height: 60)
     }

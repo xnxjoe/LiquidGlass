@@ -30,73 +30,100 @@ public enum BackgroundShape: Sendable {
     /// A capsule (pill-shaped) that adapts to the container's aspect ratio.
     case capsule
 
-    /// Returns a `CustomShape` instance for use in SwiftUI view builders.
-    /// 
-    /// The returned shape supports animation and can be used with SwiftUI modifiers
-    /// like `.fill()`, `.stroke()`, and `.clipShape()`.
-    public var shape: CustomShape {
+//    /// Returns a `CustomShape` instance for use in SwiftUI view builders.
+//    /// 
+//    /// The returned shape supports animation and can be used with SwiftUI modifiers
+//    /// like `.fill()`, `.stroke()`, and `.clipShape()`.
+//    public var shape: CustomShape {
+//        switch self {
+//        case .roundedRect(let cornerRadius):
+//            return CustomShape(shape: self, animatableCornerRadius: cornerRadius)
+//        case .circle, .capsule:
+//            return CustomShape(shape: self)
+//        }
+//    }
+    
+    public func gradient(proxy: GeometryProxy, highlighting: Color, tint: Color? = nil) -> some ShapeStyle {
         switch self {
-        case .roundedRect(let cornerRadius):
-            return CustomShape(shape: self, animatableCornerRadius: cornerRadius)
-        case .circle, .capsule:
-            return CustomShape(shape: self)
+        case .roundedRect(let radius):
+            Self.calculatedGradient(
+                highlightColor: highlighting,
+                tint: tint,
+                proxy: proxy,
+                radius: radius
+            )
+        case .circle:
+            Self.gradient(
+                highlightColor: highlighting,
+                tint: tint,
+                startAngle: .pi + .pi / 4,
+                mid1: 0.25,
+                mid2: 0.75
+            )
+        case .capsule:
+            Self.calculatedGradient(
+                highlightColor: highlighting,
+                tint: tint,
+                proxy: proxy,
+                radius: proxy.size.height / 2
+            )
         }
     }
 
-    /// Creates a highlighted stroke view with gradient effects.
-    /// 
-    /// This method generates shape-specific gradient strokes that enhance the visual
-    /// depth and glass-like appearance of the shape.
-    /// 
-    /// - Parameters:
-    ///   - highlighting: The primary color used for the highlight effect.
-    ///   - tint: Optional tint color that modifies the highlight appearance.
-    ///           When provided, creates a more subtle, colored highlight.
-    /// 
-    /// - Returns: A view with the highlighted stroke applied to the shape.
-    /// 
-    /// ```swift
-    /// BackgroundShape.roundedRect(cornerRadius: 16)
-    ///     .highlight(highlighting: .white, tint: .blue)
-    /// ```
-    public func highlight(highlighting: Color, tint: Color? = nil) -> some View {
-        Group {
-            switch self {
-            case .roundedRect(let radius):
-                GeometryReader { proxy in
-                    shape.stroke(
-                        Self.calculatedGradient(
-                            highlightColor: highlighting,
-                            tint: tint,
-                            proxy: proxy,
-                            radius: radius
-                        )
-                    )
-                }
-            case .circle:
-                shape.stroke(
-                    Self.gradient(
-                        highlightColor: highlighting,
-                        tint: tint,
-                        startAngle: .pi + .pi / 4,
-                        mid1: 0.25,
-                        mid2: 0.75
-                    )
-                )
-            case .capsule:
-                GeometryReader { proxy in
-                    shape.stroke(
-                        Self.calculatedGradient(
-                            highlightColor: highlighting,
-                            tint: tint,
-                            proxy: proxy,
-                            radius: proxy.size.height / 2
-                        )
-                    )
-                }
-            }
-        }
-    }
+//    /// Creates a highlighted stroke view with gradient effects.
+//    /// 
+//    /// This method generates shape-specific gradient strokes that enhance the visual
+//    /// depth and glass-like appearance of the shape.
+//    /// 
+//    /// - Parameters:
+//    ///   - highlighting: The primary color used for the highlight effect.
+//    ///   - tint: Optional tint color that modifies the highlight appearance.
+//    ///           When provided, creates a more subtle, colored highlight.
+//    /// 
+//    /// - Returns: A view with the highlighted stroke applied to the shape.
+//    /// 
+//    /// ```swift
+//    /// BackgroundShape.roundedRect(cornerRadius: 16)
+//    ///     .highlight(highlighting: .white, tint: .blue)
+//    /// ```
+//    public func highlight(highlighting: Color, tint: Color? = nil) -> some View {
+//        Group {
+//            switch self {
+//            case .roundedRect(let radius):
+//                GeometryReader { proxy in
+//                    shape.stroke(
+//                        Self.calculatedGradient(
+//                            highlightColor: highlighting,
+//                            tint: tint,
+//                            proxy: proxy,
+//                            radius: radius
+//                        )
+//                    )
+//                }
+//            case .circle:
+//                shape.stroke(
+//                    Self.gradient(
+//                        highlightColor: highlighting,
+//                        tint: tint,
+//                        startAngle: .pi + .pi / 4,
+//                        mid1: 0.25,
+//                        mid2: 0.75
+//                    )
+//                )
+//            case .capsule:
+//                GeometryReader { proxy in
+//                    shape.stroke(
+//                        Self.calculatedGradient(
+//                            highlightColor: highlighting,
+//                            tint: tint,
+//                            proxy: proxy,
+//                            radius: proxy.size.height / 2
+//                        )
+//                    )
+//                }
+//            }
+//        }
+//    }
 
     // MARK: - Private Gradient Helpers
     
@@ -135,7 +162,7 @@ public enum BackgroundShape: Sendable {
             let low = highlightColor.opacity(lowOpacity)
             topColor = high
             midColor = low
-            bottomColor = high
+            bottomColor = high.opacity(0.7)
         }
         
         return AngularGradient(

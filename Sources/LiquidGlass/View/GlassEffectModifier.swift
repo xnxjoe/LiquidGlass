@@ -40,6 +40,9 @@ public struct GlassEffectModifier: ViewModifier {
     
     /// Tracks current hover state (used when hoverEffect is true)
     @State private var onHover: Bool = false
+    
+    /// Respect system color scheme for subtle color adjustments.
+    @Environment(\.colorScheme) private var colorScheme
 
     // MARK: - Initializer
     
@@ -67,37 +70,63 @@ public struct GlassEffectModifier: ViewModifier {
         self.tint = tint
     }
     
-    /// Convenience computed property to convert `BackgroundShape` to `Shape`
-    private var containerShape: some Shape {
-        shape.shape
-    }
+//    /// Convenience computed property to convert `BackgroundShape` to `Shape`
+//    private var containerShape: some Shape {
+//        shape.shape
+//    }
     
     // MARK: - Body
     
     public func body(content: Content) -> some View {
         Group {
             if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+                let glassContent = Group {
+                    switch self.shape {
+                    case .roundedRect(let cornerRadius):
+                        content
+                            .glassEffect(in: RoundedRectangle(cornerRadius: cornerRadius))
+                    case .circle:
+                        content
+                            .glassEffect(in: .circle)
+                    case .capsule:
+                        content
+                            .glassEffect(in: .capsule)
+                    }
+                }
+                    .tint(tint)
+                    .backgroundStyle(hoverEffect && onHover ? AnyShapeStyle(hoverBackground) : AnyShapeStyle(.clear))
                 // Use the system glass effect API
                 if let id = id, let namespace = namespace {
                     // Apply matched geometry glass effect with ID
-                    content
-                        .glassEffect(in: containerShape)
+                    glassContent
                         .glassEffectID(id, in: namespace)
-                        .tint(tint)
                 } else {
                     // Apply glass effect without matched geometry
-                    content
-                        .glassEffect(in: containerShape)
-                        .tint(tint)
+                    glassContent
                 }
             } else {
                 // Fallback to custom glass style for earlier OS versions
                 content
-                    .background(
-                        LiquidGlass(shape: shape)
-                        .opacity(opacity)
-                        .tint(tint)
-                    )
+                    .background {
+                        LiquidGlass(shape: shape, hovering: hoverEffect && onHover)
+                            .opacity(opacity)
+                            .tint(tint)
+                    }
+                    .background {
+                        Group {
+                            switch shape {
+                            case .roundedRect(let cornerRadius):
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .fill(hoverEffect && onHover ? AnyShapeStyle(hoverBackground) : AnyShapeStyle(.clear))
+                            case .circle:
+                                Circle()
+                                    .fill(hoverEffect && onHover ? AnyShapeStyle(hoverBackground) : AnyShapeStyle(.clear))
+                            case .capsule:
+                                Capsule()
+                                    .fill(hoverEffect && onHover ? AnyShapeStyle(hoverBackground) : AnyShapeStyle(.clear))
+                            }
+                        }
+                    }
             }
         }
         // Track hover state if hover effect is enabled
@@ -108,11 +137,10 @@ public struct GlassEffectModifier: ViewModifier {
                 }
             }
         }
-        // Show a subtle fill on hover when enabled
-        .background(
-            containerShape.fill(
-                hoverEffect && onHover ? AnyShapeStyle(.quaternary) : AnyShapeStyle(.clear)
-            )
-        )
     }
+    
+    private var hoverBackground: some ShapeStyle {
+        colorScheme == .dark ? AnyShapeStyle(.quaternary) : AnyShapeStyle(.white)
+    }
+    
 }
