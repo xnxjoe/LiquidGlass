@@ -6,10 +6,51 @@
 
 import SwiftUI
 
-/// A button style that adds a subtle hover background and the glass effect.
+/// A button style that creates beautiful frosted glass effects with customizable shapes and tinting.
 ///
-/// `GlassButtonStyle` is a lightweight, composable button style that combines a
-/// It supports both content-padding and fixed-size usages.
+/// `GlassButtonStyle` provides a modern glass appearance for buttons with automatic platform adaptation.
+/// On iOS 26+ and macOS 26+, it uses system glass button styles for optimal performance and consistency.
+/// On earlier platforms, it falls back to custom glass rendering using the LiquidGlass framework.
+///
+/// ## Usage
+///
+/// Apply the glass style to any button:
+///
+/// ```swift
+/// Button("Click Me") {
+///     // Action
+/// }
+/// .buttonStyle(GlassButtonStyle())
+/// ```
+///
+/// Customize the shape and prominence:
+///
+/// ```swift
+/// Button("Primary Action") {
+///     // Action
+/// }
+/// .buttonStyle(
+///     GlassButtonStyle(
+///         shape: .capsule,
+///         prominent: true
+///     )
+///     .tint(.blue)
+/// )
+/// ```
+///
+/// ## Features
+///
+/// - **Shape Customization**: Supports rounded rectangles, circles, and capsules
+/// - **Prominence Levels**: Regular and prominent styles for visual hierarchy
+/// - **Custom Tinting**: Apply brand colors with the `.tint(_:)` modifier
+/// - **Platform Adaptive**: Uses system styles on newer platforms, custom rendering on older ones
+/// - **Hover Effects**: Automatic hover states and press feedback
+/// - **Performance Optimized**: Minimal view hierarchy and efficient rendering
+///
+/// ## Platform Support
+///
+/// - macOS 12.0+, iOS 15.0+, tvOS 15.0+, watchOS 9.0+
+/// - Enhanced system integration on macOS 26.0+, iOS 26.0+, tvOS 26.0+, watchOS 26.0+
 public struct GlassButtonStyle: ButtonStyle {
     // MARK: - Properties
     
@@ -19,15 +60,32 @@ public struct GlassButtonStyle: ButtonStyle {
     /// Whether to use the prominent glass style (more visible/emphasized).
     private let prominent: Bool
     
+    /// Optional tint color for customizing the glass appearance.
+    /// When `nil`, uses the system accent color for prominent styles.
     private var tint: Color?
     
     // MARK: - Initializer
     
-    /// Creates a glass button style.
+    /// Creates a glass button style with the specified shape and prominence level.
     ///
     /// - Parameters:
-    ///   - shape: The background shape for the button.
-    ///   - prominent: Whether to use the prominent (emphasized) glass style.
+    ///   - shape: The background shape for the button. Defaults to a rounded rectangle with 12pt corners.
+    ///            Available options: `.roundedRect(cornerRadius:)`, `.circle`, `.capsule`.
+    ///   - prominent: Whether to use the prominent (emphasized) glass style. Defaults to `false`.
+    ///                Prominent buttons have enhanced visual weight and are ideal for primary actions.
+    ///
+    /// ## Examples
+    ///
+    /// ```swift
+    /// // Default rounded rectangle button
+    /// GlassButtonStyle()
+    ///
+    /// // Circular button
+    /// GlassButtonStyle(shape: .circle)
+    ///
+    /// // Prominent capsule button for primary actions
+    /// GlassButtonStyle(shape: .capsule, prominent: true)
+    /// ```
     public init(
         shape: BackgroundShape = .roundedRect(cornerRadius: 12),
         prominent: Bool = false
@@ -36,12 +94,37 @@ public struct GlassButtonStyle: ButtonStyle {
         self.prominent = prominent
     }
     
+    
+    /// Applies a custom tint color to the glass button style.
+    ///
+    /// The tint color affects the glass appearance, providing subtle color theming
+    /// while maintaining the translucent glass effect. On prominent buttons,
+    /// the tint is more visible and enhances the button's visual weight.
+    ///
+    /// - Parameter tint: The color to tint the glass effect, or `nil` to use
+    ///                   the system accent color for prominent styles.
+    /// - Returns: A new `GlassButtonStyle` instance with the specified tint applied.
+    ///
+    /// ## Examples
+    ///
+    /// ```swift
+    /// // Blue-tinted glass button
+    /// GlassButtonStyle().tint(.blue)
+    ///
+    /// // Remove custom tinting (use system accent)
+    /// GlassButtonStyle().tint(nil)
+    ///
+    /// // Brand color for prominent button
+    /// GlassButtonStyle(prominent: true).tint(.orange)
+    /// ```
     public func tint(_ tint: Color?) -> Self {
         var copy = self
         copy.tint = tint
         return copy
     }
     
+    /// The effective color used for prominent button styling.
+    /// Returns the custom tint if provided, otherwise falls back to the system accent color.
     private var prominentColor: Color {
         tint ?? .accentColor
     }
@@ -49,6 +132,13 @@ public struct GlassButtonStyle: ButtonStyle {
     // MARK: - Private Helpers
     
     /// Applies the appropriate system glass button style for Platform 26+.
+    ///
+    /// Uses the native `.glass` and `.glassProminent` button styles introduced in Platform 26,
+    /// providing optimal performance and platform consistency. Automatically applies
+    /// the configured tint color when available.
+    ///
+    /// - Parameter label: The button's label content to style.
+    /// - Returns: A view with the appropriate system glass button style applied.
     @ViewBuilder
     @available(macOS 26.0, iOS 26.0, watchOS 26.0, tvOS 26.0, *)
     private func systemGlassButton(label: Configuration.Label) -> some View {
@@ -62,6 +152,12 @@ public struct GlassButtonStyle: ButtonStyle {
     }
     
     /// Applies system button border shapes for Platform 14+.
+    ///
+    /// Maps the custom `BackgroundShape` values to system `ButtonBorderShape` equivalents
+    /// for consistent appearance with platform design guidelines.
+    ///
+    /// - Parameter content: The view content to apply the button shape to.
+    /// - Returns: The content view with the appropriate button border shape applied.
     @ViewBuilder
     @available(macOS 14.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
     private func applySystemButtonShape<T: View>(to content: T) -> some View {
@@ -77,12 +173,30 @@ public struct GlassButtonStyle: ButtonStyle {
 
     // MARK: - ButtonStyle Protocol
     
+    /// Creates the styled button content with platform-appropriate glass effects.
+    ///
+    /// This method provides adaptive rendering based on the target platform:
+    ///
+    /// **Platform 26+**: Uses native system glass button styles (`.glass`, `.glassProminent`)
+    /// with automatic shape mapping and tint application for optimal performance.
+    ///
+    /// **Earlier Platforms**: Falls back to custom glass rendering using the `.liquidGlass()`
+    /// modifier, providing consistent visual appearance across all supported platforms.
+    ///
+    /// The implementation automatically handles:
+    /// - Press state feedback with color adjustments
+    /// - Hover effects for supported platforms
+    /// - Tint color application and prominence styling
+    /// - Shape-specific rendering optimizations
+    ///
+    /// - Parameter configuration: The button configuration containing label and interaction state.
+    /// - Returns: A view representing the styled button with glass effects applied.
     public func makeBody(configuration: Configuration) -> some View {
         if #available(macOS 26.0, iOS 26.0, watchOS 26.0, tvOS 26.0, *) {
             // Use system glass button styles on Platform 26+
             applySystemButtonShape(to: systemGlassButton(label: configuration.label))
         } else {
-            let tintColor: Color? = configuration.isPressed ? .secondary : (prominent ?  prominentColor : nil)
+            let tintColor: Color? = configuration.isPressed ? .secondary : (prominent ? prominentColor : nil)
             // Use custom glass background for earlier platforms
             configuration.label
                 .buttonStyle(.plain)
@@ -91,13 +205,37 @@ public struct GlassButtonStyle: ButtonStyle {
     }
 }
 
-#Preview {
-    Button {
-        //
-    } label: {
-        Text("Tap Me!")
-            .padding(12)
+#Preview("Glass Button Styles") {
+    VStack(spacing: 20) {
+        // Basic glass button
+        Button("Tap Me!") {
+            //
+        }
+        .padding(12)
+        .buttonStyle(GlassButtonStyle(shape: .capsule))
+        
+        // Prominent tinted button
+        Button("Primary Action") {
+            //
+        }
+        .padding(12)
+        .buttonStyle(
+            GlassButtonStyle(
+                shape: .roundedRect(cornerRadius: 16),
+                prominent: true
+            )
+            .tint(.blue)
+        )
+        
+        // Circular button
+        Button {
+            //
+        } label: {
+            Image(systemName: "heart.fill")
+                .font(.title2)
+                .padding()
+        }
+        .buttonStyle(GlassButtonStyle(shape: .circle))
     }
-    .buttonStyle(GlassButtonStyle(shape: .capsule))
     .padding()
 }
