@@ -46,11 +46,6 @@ import SwiftUI
 /// - **Platform Adaptive**: Uses system styles on newer platforms, custom rendering on older ones
 /// - **Hover Effects**: Automatic hover states and press feedback
 /// - **Performance Optimized**: Minimal view hierarchy and efficient rendering
-///
-/// ## Platform Support
-///
-/// - macOS 12.0+, iOS 15.0+, tvOS 15.0+, watchOS 9.0+
-/// - Enhanced system integration on macOS 26.0+, iOS 26.0+, tvOS 26.0+, watchOS 26.0+
 public struct GlassButtonStyle: ButtonStyle {
     // MARK: - Properties
     

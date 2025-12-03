@@ -16,7 +16,6 @@ import SwiftUI
 ///
 /// Optional features:
 /// - **Hover effect**: When enabled, shows a subtle quaternary fill on pointer hover.
-/// - **Namespace matching**: Supports `glassEffectID(_:in:)` for matched geometry effects.
 public struct GlassEffectModifier: ViewModifier {
     // MARK: - Properties
     

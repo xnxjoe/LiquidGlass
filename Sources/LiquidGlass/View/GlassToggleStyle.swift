@@ -12,9 +12,6 @@ import SwiftUI
 /// and only the icon when off, both with glass backgrounds that adapt their shapes.
 ///
 /// ```swift
-/// @State private var isEnabled = false
-/// @Namespace private var toggleNamespace
-///
 /// Toggle("Settings", systemImage: "gear", isOn: $isEnabled)
 ///     .toggleStyle(GlassToggleStyle().tint(.blue))
 /// ```

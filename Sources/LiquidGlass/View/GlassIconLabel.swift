@@ -26,7 +26,6 @@ import SwiftUI
 /// - **Icon Font**: Customizes the icon's font style and size
 /// - **Icon Tint**: Separate color control for the icon itself
 /// - **Icon Only**: Option to hide the text and show only the icon
-/// - **Spacing**: Custom spacing between icon and text
 public struct GlassIconLabel: LabelStyle {
     // MARK: - Properties
     
