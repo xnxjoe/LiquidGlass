@@ -35,9 +35,7 @@ public extension View {
         shape: BackgroundShape = .capsule,
         opacity: CGFloat = 0.6,
         tint: Color? = nil,
-        hoverEffect: Bool = false,
-        id: String? = nil,
-        namespace: Namespace.ID? = nil
+        hoverEffect: Bool = false
     ) -> some View {
         self.modifier(
             GlassEffectModifier(
@@ -45,8 +43,6 @@ public extension View {
                 opacity: opacity,
                 tint: tint,
                 hoverEffect: hoverEffect,
-                id: id,
-                namespace: namespace
             )
         )
     }

@@ -32,12 +32,6 @@ public struct GlassToggleStyle: ToggleStyle {
     /// Padding applied to the toggle content.
     private let padding: EdgeInsets
     
-    /// Identifier for matched geometry effects.
-    private let id: String
-    
-    /// Namespace for matched geometry effects.
-    private let namespace: Namespace.ID
-    
     /// Optional tint color for the icon when enabled.
     private var tint: Color?
 
@@ -52,14 +46,10 @@ public struct GlassToggleStyle: ToggleStyle {
     ///   - namespace: Namespace for matched geometry effects.
     public init(
         shape: BackgroundShape,
-        padding: EdgeInsets = EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10),
-        id: String,
-        namespace: Namespace.ID
+        padding: EdgeInsets = EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10)
     ) {
         self.backgroundShape = shape
         self.padding = padding
-        self.id = id
-        self.namespace = namespace
     }
 
     /// Creates a glass toggle style with uniform padding.
@@ -71,12 +61,10 @@ public struct GlassToggleStyle: ToggleStyle {
     ///   - namespace: Namespace for matched geometry effects.
     public init(
         shape: BackgroundShape,
-        padding: CGFloat,
-        id: String,
-        namespace: Namespace.ID
+        padding: CGFloat
     ) {
         let edgeInsets = EdgeInsets(top: padding, leading: padding, bottom: padding, trailing: padding)
-        self.init(shape: shape, padding: edgeInsets, id: id, namespace: namespace)
+        self.init(shape: shape, padding: edgeInsets)
     }
 
     // MARK: - Fluent API
@@ -99,23 +87,13 @@ public struct GlassToggleStyle: ToggleStyle {
                 configuration.label
                     .labelStyle(ToggleLabelStyle(tint: tint))
                     .padding(padding)
-                    .modifier(GlassEffectModifier(
-                        shape: backgroundShape,
-                        hoverEffect: true,
-                        id: id,
-                        namespace: namespace
-                    ))
+                    .liquidGlass(shape: backgroundShape, hoverEffect: true)
             } else {
                 // Collapsed state: show only icon with circular background
                 configuration.label
                     .labelStyle(.iconOnly)
                     .padding(padding.top)
-                    .modifier(GlassEffectModifier(
-                        shape: .circle,
-                        hoverEffect: true,
-                        id: id,
-                        namespace: namespace
-                    ))
+                    .liquidGlass(shape: .circle, hoverEffect: true)
             }
         }
         

@@ -23,12 +23,6 @@ public struct GlassEffectModifier: ViewModifier {
     /// The underlying background shape (roundedRect, circle, capsule)
     private let shape: BackgroundShape
     
-    /// Optional identifier for matched geometry glass effects (Platform 26+)
-    private let id: String?
-    
-    /// Optional namespace for matched geometry glass effects (Platform 26+)
-    private let namespace: Namespace.ID?
-    
     /// Whether to show a subtle hover effect on pointer hover
     private let hoverEffect: Bool
 
@@ -52,19 +46,13 @@ public struct GlassEffectModifier: ViewModifier {
     ///   - opacity: The opacity level for the glass effect (default: 0.6).
     ///     Higher values make the glass more opaque, lower values more transparent.
     ///   - hoverEffect: If `true`, displays a subtle fill on pointer hover. Default is `false`.
-    ///   - id: Optional identifier for matched geometry effects (Platform 26+).
-    ///   - namespace: Optional namespace for matched geometry effects (Platform 26+).
     public init(
         shape: BackgroundShape,
         opacity: CGFloat = 0.6,
         tint: Color? = nil,
-        hoverEffect: Bool = false,
-        id: String? = nil,
-        namespace: Namespace.ID? = nil
+        hoverEffect: Bool = false
     ) {
         self.shape = shape
-        self.id = id
-        self.namespace = namespace
         self.hoverEffect = hoverEffect
         self.opacity = opacity
         self.tint = tint
@@ -80,7 +68,7 @@ public struct GlassEffectModifier: ViewModifier {
     public func body(content: Content) -> some View {
         Group {
             if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
-                let glassContent = Group {
+                Group {
                     switch self.shape {
                     case .roundedRect(let cornerRadius):
                         content
@@ -95,15 +83,6 @@ public struct GlassEffectModifier: ViewModifier {
                 }
                     .tint(tint)
                     .backgroundStyle(hoverEffect && onHover ? AnyShapeStyle(hoverBackground) : AnyShapeStyle(.clear))
-                // Use the system glass effect API
-                if let id = id, let namespace = namespace {
-                    // Apply matched geometry glass effect with ID
-                    glassContent
-                        .glassEffectID(id, in: namespace)
-                } else {
-                    // Apply glass effect without matched geometry
-                    glassContent
-                }
             } else {
                 // Fallback to custom glass style for earlier OS versions
                 content
@@ -142,5 +121,4 @@ public struct GlassEffectModifier: ViewModifier {
     private var hoverBackground: some ShapeStyle {
         colorScheme == .dark ? AnyShapeStyle(.quaternary) : AnyShapeStyle(.white)
     }
-    
 }

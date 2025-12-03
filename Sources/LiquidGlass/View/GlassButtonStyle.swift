@@ -6,11 +6,9 @@
 
 import SwiftUI
 
-
 /// A button style that adds a subtle hover background and the glass effect.
 ///
 /// `GlassButtonStyle` is a lightweight, composable button style that combines a
-/// shape-based hover/focus background with the library's `GlassEffectModifier`.
 /// It supports both content-padding and fixed-size usages.
 public struct GlassButtonStyle: ButtonStyle {
     // MARK: - Properties
@@ -21,11 +19,7 @@ public struct GlassButtonStyle: ButtonStyle {
     /// Whether to use the prominent glass style (more visible/emphasized).
     private let prominent: Bool
     
-    /// Optional identifier for matched geometry effects.
-    private let id: String?
-    
-    /// Optional namespace for matched geometry effects.
-    private let namespace: Namespace.ID?
+    private var tint: Color?
     
     // MARK: - Initializer
     
@@ -34,21 +28,24 @@ public struct GlassButtonStyle: ButtonStyle {
     /// - Parameters:
     ///   - shape: The background shape for the button.
     ///   - prominent: Whether to use the prominent (emphasized) glass style.
-    ///   - id: Optional identifier for matched geometry effects.
-    ///   - namespace: Optional namespace for matched geometry effects.
     public init(
         shape: BackgroundShape = .roundedRect(cornerRadius: 12),
-        prominent: Bool = false,
-        id: String? = nil,
-        namespace: Namespace.ID? = nil
+        prominent: Bool = false
     ) {
         self.shape = shape
         self.prominent = prominent
-        self.id = id
-        self.namespace = namespace
+    }
+    
+    public func tint(_ tint: Color?) -> Self {
+        var copy = self
+        copy.tint = tint
+        return copy
+    }
+    
+    private var prominentColor: Color {
+        tint ?? .accentColor
     }
 
-    
     // MARK: - Private Helpers
     
     /// Applies the appropriate system glass button style for Platform 26+.
@@ -56,7 +53,9 @@ public struct GlassButtonStyle: ButtonStyle {
     @available(macOS 26.0, iOS 26.0, watchOS 26.0, tvOS 26.0, *)
     private func systemGlassButton(label: Configuration.Label) -> some View {
         if prominent {
-            label.buttonStyle(.glassProminent)
+            label
+                .buttonStyle(.glassProminent)
+                .tint(prominentColor)
         } else {
             label.buttonStyle(.glass)
         }
@@ -76,30 +75,21 @@ public struct GlassButtonStyle: ButtonStyle {
         }
     }
 
-    /// Creates the custom glass background for pre-Platform 26 systems.
-    @ViewBuilder
-    private func customGlassBackground(isPressed: Bool) -> some View {
-        LiquidGlass(shape: shape)
-            .tint(isPressed ? Color.secondary : (prominent ? .accentColor : nil))
-    }
-
     // MARK: - ButtonStyle Protocol
     
     public func makeBody(configuration: Configuration) -> some View {
         if #available(macOS 26.0, iOS 26.0, watchOS 26.0, tvOS 26.0, *) {
             // Use system glass button styles on Platform 26+
-            let glassButton = systemGlassButton(label: configuration.label)
-            applySystemButtonShape(to: glassButton)
+            applySystemButtonShape(to: systemGlassButton(label: configuration.label))
         } else {
+            let tintColor: Color? = configuration.isPressed ? .secondary : (prominent ?  prominentColor : nil)
             // Use custom glass background for earlier platforms
             configuration.label
-                .background {
-                    customGlassBackground(isPressed: configuration.isPressed)
-                }
+                .buttonStyle(.plain)
+                .liquidGlass(shape: shape, tint: tintColor, hoverEffect: !configuration.isPressed)
         }
     }
 }
-
 
 #Preview {
     Button {
