@@ -72,19 +72,15 @@ public struct LiquidGlass: View {
     @ViewBuilder
     private func applyEffect(baseShape: some InsettableShape) -> some View {
         let highlightOpacity = opacity * 0.75
-        let tintOpacity = opacity * 0.2
         // Base fill with system material for frosted effect
         baseShape
             .fill(.ultraThinMaterial)
             .overlay {
-                // Conditional tint overlay
                 if let tint = tintColor {
-                    baseShape.fill(tint.opacity(tintOpacity))
+                    baseShape.fill(tint)
+                } else {
+                    baseShape.fill(Color.highlight.opacity(highlightOpacity))
                 }
-            }
-            .overlay {
-                // Highlight layer
-                baseShape.fill(Color.highlight.opacity(highlightOpacity))
             }
             .overlay {
 //                if !hovering || colorScheme == .dark {
