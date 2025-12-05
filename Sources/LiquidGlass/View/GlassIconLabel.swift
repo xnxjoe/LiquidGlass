@@ -121,6 +121,7 @@ public struct GlassIconLabel: LabelStyle {
                 .background(
                     LiquidGlass(shape: .circle)
                         .tint(effectiveTint)
+                        .opacity(0.2)
                 )
         }
         

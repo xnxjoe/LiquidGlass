@@ -59,6 +59,8 @@ public struct GlassButtonStyle: ButtonStyle {
     /// When `nil`, uses the system accent color for prominent styles.
     private var tint: Color?
     
+    private var opacity: CGFloat = 1
+    
     // MARK: - Initializer
     
     /// Creates a glass button style with the specified shape and prominence level.
@@ -115,6 +117,12 @@ public struct GlassButtonStyle: ButtonStyle {
     public func tint(_ tint: Color?) -> Self {
         var copy = self
         copy.tint = tint
+        return copy
+    }
+    
+    public func opacity(_ opacity: CGFloat) -> Self {
+        var copy = self
+        copy.opacity = opacity
         return copy
     }
     
@@ -191,11 +199,11 @@ public struct GlassButtonStyle: ButtonStyle {
             // Use system glass button styles on Platform 26+
             applySystemButtonShape(to: systemGlassButton(label: configuration.label))
         } else {
-            let tintColor: Color? = configuration.isPressed ? .secondary : (prominent ? prominentColor : nil)
+            let tintColor: Color? = configuration.isPressed ? Color.secondary.opacity(0.2) : (prominent ? prominentColor : nil)
             // Use custom glass background for earlier platforms
             configuration.label
                 .buttonStyle(.plain)
-                .liquidGlass(shape: shape, tint: tintColor, hoverEffect: !configuration.isPressed)
+                .liquidGlass(shape: shape, opacity: opacity, tint: tintColor, hoverEffect: !configuration.isPressed)
         }
     }
 }

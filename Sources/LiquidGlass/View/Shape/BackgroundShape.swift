@@ -142,8 +142,8 @@ public enum BackgroundShape: Sendable {
     private static func gradient(
         highlightColor: Color,
         tint: Color? = nil,
-        highOpacity: CGFloat = 0.7,
-        lowOpacity: CGFloat = 0.1,
+        highOpacity: CGFloat = 1,
+        lowOpacity: CGFloat = 0.3,
         startAngle: CGFloat,
         mid1: CGFloat,
         mid2: CGFloat

@@ -28,6 +28,8 @@ public struct GlassToggleStyle: ToggleStyle {
     /// Horizontal padding applied to the expanded state content.
     private var horizontalPadding: CGFloat = 8
     
+    private var opacity: CGFloat = 0.6
+    
     // MARK: - Initializer
     
     /// Creates a glass toggle style with default dimensions.
@@ -62,6 +64,12 @@ public struct GlassToggleStyle: ToggleStyle {
         copy.tint = color
         return copy
     }
+    
+    public func opacity(_ opacity: CGFloat) -> Self {
+        var copy = self
+        copy.opacity = opacity
+        return copy
+    }
 
     // MARK: - ToggleStyle Protocol
     
@@ -79,7 +87,7 @@ public struct GlassToggleStyle: ToggleStyle {
                 configuration.label
                     .labelStyle(.iconOnly)
                     .frame(width: toggleHeight, height: toggleHeight)
-                    .liquidGlass(shape: .circle, hoverEffect: true)
+                    .liquidGlass(shape: .circle, opacity: opacity, hoverEffect: true)
             }
         }
         .animation(.easeInOut(duration: 0.3), value: configuration.isOn)
