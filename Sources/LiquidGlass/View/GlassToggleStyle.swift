@@ -65,7 +65,7 @@ public struct GlassToggleStyle: ToggleStyle {
         return copy
     }
     
-    public func opacity(_ opacity: CGFloat) -> Self {
+    public func glassOpacity(_ opacity: CGFloat) -> Self {
         var copy = self
         copy.opacity = opacity
         return copy
@@ -120,8 +120,12 @@ private struct ToggleLabelStyle: LabelStyle {
         Label {
             configuration.title
         } icon: {
-            configuration.icon
-                .foregroundStyle(tint ?? .primary)
+            if let tint = tint {
+                configuration.icon
+                    .foregroundStyle(tint)
+            } else {
+                configuration.icon
+            }
         }
         .labelStyle(.titleAndIcon)
         .symbolVariant(.fill)

@@ -120,7 +120,7 @@ public struct GlassButtonStyle: ButtonStyle {
         return copy
     }
     
-    public func opacity(_ opacity: CGFloat) -> Self {
+    public func glassOpacity(_ opacity: CGFloat) -> Self {
         var copy = self
         copy.opacity = opacity
         return copy
