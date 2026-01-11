@@ -5,6 +5,10 @@
 
 import SwiftUI
 
+public enum LightAngle {
+    case topLeading, bottomTrailing, none, all
+}
+
 /// A SwiftUI view that renders a frosted-glass background for a ``BackgroundShape``.
 ///
 /// ```swift
@@ -35,6 +39,8 @@ public struct LiquidGlass: View {
     private var opacity: CGFloat = 0.6
     
     private let hovering: Bool
+    
+    private var lightAngle: LightAngle = .topLeading
 
     // MARK: - Initializer
 
@@ -45,6 +51,13 @@ public struct LiquidGlass: View {
         self.shape = shape
         self.hovering = hovering
     }
+    
+    public func lightAngle(_ angle: LightAngle) -> Self {
+        var copy = self
+        copy.lightAngle = angle
+        return copy
+    }
+    
 
     // MARK: - Fluent API
     
@@ -63,10 +76,14 @@ public struct LiquidGlass: View {
     /// - Returns: A new `LiquidGlass` with the specified tint color.
     ///
     /// The opacity of the glass effect is preserved.
-    public func tint(_ tint: Color?) -> LiquidGlass {
-        var copy = self
-        copy.tintColor = tint
-        return copy
+    public func tintColor(_ tint: Color?) -> LiquidGlass {
+        if let tint = tint {
+            var copy = self
+            copy.tintColor = tint
+            return copy
+        } else {
+            return self
+        }
     }
     
     @ViewBuilder
@@ -83,17 +100,18 @@ public struct LiquidGlass: View {
                 }
             }
             .overlay {
-//                if !hovering || colorScheme == .dark {
-                    // Decorative stroke with blend mode
-                GeometryReader { proxy in
-                    baseShape
-                        .stroke(shape.gradient(proxy: proxy, highlighting: Color.stroke, tint: tintColor))
-                        .blendMode(.plusLighter)
+                switch lightAngle {
+                case .topLeading, .bottomTrailing, .all:
+                    GeometryReader { proxy in
+                        baseShape
+                            .stroke(shape.gradient(proxy: proxy, highlighting: Color.stroke, tint: tintColor, angle: lightAngle))
+                            .blendMode(.plusLighter)
+                    }
+                case .none:
+                    EmptyView()
                 }
-                   
-//                }
             }
-            .shadow(color: Color.shadow, radius: 15, x: 0, y: 6)
+            .shadow(color: Color.shadow, radius: 10, x: 0, y: 0)
     }
 
     public var body: some View {

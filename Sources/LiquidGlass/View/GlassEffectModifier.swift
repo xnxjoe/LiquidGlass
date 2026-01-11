@@ -31,6 +31,8 @@ public struct GlassEffectModifier: ViewModifier {
     
     private let tint: Color?
     
+    private let lightAngle: LightAngle
+    
     /// Tracks current hover state (used when hoverEffect is true)
     @State private var onHover: Bool = false
     
@@ -45,16 +47,19 @@ public struct GlassEffectModifier: ViewModifier {
     ///   - opacity: The opacity level for the glass effect (default: 0.6).
     ///     Higher values make the glass more opaque, lower values more transparent.
     ///   - hoverEffect: If `true`, displays a subtle fill on pointer hover. Default is `false`.
+    ///   - angle: Glass effect light angle
     public init(
         shape: BackgroundShape,
         opacity: CGFloat = 0.6,
         tint: Color? = nil,
-        hoverEffect: Bool = false
+        hoverEffect: Bool = false,
+        angle: LightAngle = .topLeading
     ) {
         self.shape = shape
         self.hoverEffect = hoverEffect
         self.opacity = opacity
         self.tint = tint
+        self.lightAngle = angle
     }
     
 //    /// Convenience computed property to convert `BackgroundShape` to `Shape`
@@ -67,6 +72,7 @@ public struct GlassEffectModifier: ViewModifier {
     public func body(content: Content) -> some View {
         Group {
             if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, *) {
+                #if !os(visionOS)
                 Group {
                     switch self.shape {
                     case .roundedRect(let cornerRadius):
@@ -82,13 +88,15 @@ public struct GlassEffectModifier: ViewModifier {
                 }
                     .tint(tint)
                     .backgroundStyle(hoverEffect && onHover ? AnyShapeStyle(hoverBackground) : AnyShapeStyle(.clear))
+                #endif
             } else {
                 // Fallback to custom glass style for earlier OS versions
                 content
                     .background {
                         LiquidGlass(shape: shape, hovering: hoverEffect && onHover)
                             .opacity(opacity)
-                            .tint(tint)
+                            .tintColor(tint)
+                            .lightAngle(lightAngle)
                     }
                     .background {
                         Group {
@@ -107,6 +115,7 @@ public struct GlassEffectModifier: ViewModifier {
                     }
             }
         }
+#if os(macOS)
         // Track hover state if hover effect is enabled
         .onHover { hovering in
             if hoverEffect {
@@ -115,6 +124,7 @@ public struct GlassEffectModifier: ViewModifier {
                 }
             }
         }
+#endif
     }
     
     private var hoverBackground: some ShapeStyle {

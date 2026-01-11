@@ -142,9 +142,11 @@ public struct GlassButtonStyle: ButtonStyle {
     ///
     /// - Parameter label: The button's label content to style.
     /// - Returns: A view with the appropriate system glass button style applied.
+    ///
     @ViewBuilder
-    @available(macOS 26.0, iOS 26.0, watchOS 26.0, tvOS 26.0, *)
+    @available(macOS 26.0, iOS 26.0, watchOS 26.0, visionOS 26.0, tvOS 26.0, *)
     private func systemGlassButton(label: Configuration.Label) -> some View {
+        #if !os(visionOS)
         if prominent {
             label
                 .buttonStyle(.glassProminent)
@@ -152,6 +154,17 @@ public struct GlassButtonStyle: ButtonStyle {
         } else {
             label.buttonStyle(.glass)
         }
+        #else
+        if prominent {
+            if prominent {
+                label
+                    .buttonStyle(.borderedProminent)
+                    .tint(prominentColor)
+            } else {
+                label
+            }
+        }
+        #endif
     }
     
     /// Applies system button border shapes for Platform 14+.
@@ -162,13 +175,14 @@ public struct GlassButtonStyle: ButtonStyle {
     /// - Parameter content: The view content to apply the button shape to.
     /// - Returns: The content view with the appropriate button border shape applied.
     @ViewBuilder
-    @available(macOS 14.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
+    @available(macOS 14.0, iOS 17.0, watchOS 9.0, tvOS 16.0, *)
     private func applySystemButtonShape<T: View>(to content: T) -> some View {
         switch shape {
         case .roundedRect(let cornerRadius):
             content.buttonBorderShape(.roundedRectangle(radius: cornerRadius))
         case .circle:
-            content.buttonBorderShape(.circle)
+            content
+//                .buttonBorderShape(.circle)
         case .capsule:
             content.buttonBorderShape(.capsule)
         }
@@ -195,7 +209,7 @@ public struct GlassButtonStyle: ButtonStyle {
     /// - Parameter configuration: The button configuration containing label and interaction state.
     /// - Returns: A view representing the styled button with glass effects applied.
     public func makeBody(configuration: Configuration) -> some View {
-        if #available(macOS 26.0, iOS 26.0, watchOS 26.0, tvOS 26.0, *) {
+        if #available(macOS 26.0, iOS 26.0, watchOS 26.0, visionOS 26.0, tvOS 26.0, *) {
             // Use system glass button styles on Platform 26+
             applySystemButtonShape(to: systemGlassButton(label: configuration.label))
         } else {

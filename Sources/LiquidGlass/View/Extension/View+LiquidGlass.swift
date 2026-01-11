@@ -28,14 +28,13 @@ public extension View {
     ///   - opacity: The opacity level for the glass effect (default: 0.6).
     ///     Higher values make the glass more opaque, lower values more transparent.
     ///   - hoverEffect: If `true`, shows a subtle fill on pointer hover. Default is `false`.
-    ///   - id: Optional identifier for matched geometry effects (Platform 26+). Default is `nil`.
-    ///   - namespace: Optional namespace for matched geometry effects (Platform 26+). Default is `nil`.
     /// - Returns: A view with a glass background effect applied.
     func liquidGlass(
         shape: BackgroundShape = .capsule,
         opacity: CGFloat = 0.6,
         tint: Color? = nil,
-        hoverEffect: Bool = false
+        hoverEffect: Bool = false,
+        angle: LightAngle = .topLeading
     ) -> some View {
         self.modifier(
             GlassEffectModifier(
@@ -43,6 +42,7 @@ public extension View {
                 opacity: opacity,
                 tint: tint,
                 hoverEffect: hoverEffect,
+                angle: angle
             )
         )
     }

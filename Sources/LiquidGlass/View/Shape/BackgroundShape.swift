@@ -43,14 +43,15 @@ public enum BackgroundShape: Sendable {
 //        }
 //    }
     
-    public func gradient(proxy: GeometryProxy, highlighting: Color, tint: Color? = nil) -> some ShapeStyle {
+    public func gradient(proxy: GeometryProxy, highlighting: Color, tint: Color? = nil, angle: LightAngle) -> some ShapeStyle {
         switch self {
         case .roundedRect(let radius):
             Self.calculatedGradient(
                 highlightColor: highlighting,
                 tint: tint,
                 proxy: proxy,
-                radius: radius
+                radius: radius,
+                angle: angle
             )
         case .circle:
             Self.gradient(
@@ -58,14 +59,16 @@ public enum BackgroundShape: Sendable {
                 tint: tint,
                 startAngle: .pi + .pi / 4,
                 mid1: 0.25,
-                mid2: 0.75
+                mid2: 0.75,
+                angle: angle
             )
         case .capsule:
             Self.calculatedGradient(
                 highlightColor: highlighting,
                 tint: tint,
                 proxy: proxy,
-                radius: proxy.size.height / 2
+                radius: proxy.size.height / 2,
+                angle: angle
             )
         }
     }
@@ -146,8 +149,13 @@ public enum BackgroundShape: Sendable {
         lowOpacity: CGFloat = 0.3,
         startAngle: CGFloat,
         mid1: CGFloat,
-        mid2: CGFloat
+        mid2: CGFloat,
+        angle: LightAngle
     ) -> AngularGradient {
+        
+        if angle == .none {
+            return AngularGradient.init(colors: [.clear], center: .center)
+        }
         
         let topColor: Color
         let midColor: Color
@@ -165,6 +173,16 @@ public enum BackgroundShape: Sendable {
             bottomColor = high.opacity(0.7)
         }
         
+        if angle == .all {
+            return AngularGradient.init(colors: [topColor], center: .center)
+        }
+        
+        var ss = startAngle
+        
+        if angle == .bottomTrailing {
+            ss = ss + .pi
+        }
+        
         return AngularGradient(
             stops: [
                 .init(color: topColor, location: 0),
@@ -174,7 +192,7 @@ public enum BackgroundShape: Sendable {
                 .init(color: topColor, location: 1)
             ],
             center: .center,
-            angle: .radians(startAngle)
+            angle: .radians(ss)
         )
     }
     
@@ -194,7 +212,8 @@ public enum BackgroundShape: Sendable {
         highlightColor: Color,
         tint: Color? = nil,
         proxy: GeometryProxy,
-        radius: CGFloat
+        radius: CGFloat,
+        angle: LightAngle
     ) -> AngularGradient {
         let halfWidth = proxy.size.width / 2
         let halfHeight = proxy.size.height / 2
@@ -219,7 +238,8 @@ public enum BackgroundShape: Sendable {
             tint: tint,
             startAngle: startAngle,
             mid1: mid,
-            mid2: mid2
+            mid2: mid2,
+            angle: angle
         )
     }
 }
