@@ -46,7 +46,7 @@ import SwiftUI
 /// - **Platform Adaptive**: Uses system styles on newer platforms, custom rendering on older ones
 /// - **Hover Effects**: Automatic hover states and press feedback
 /// - **Performance Optimized**: Minimal view hierarchy and efficient rendering
-public struct GlassButtonStyle: ButtonStyle {
+fileprivate struct GlassButtonStyle: ButtonStyle {
     // MARK: - Properties
     
     /// The background shape for the button.
@@ -57,9 +57,9 @@ public struct GlassButtonStyle: ButtonStyle {
     
     /// Optional tint color for customizing the glass appearance.
     /// When `nil`, uses the system accent color for prominent styles.
-    private var tint: Color?
+    private let tint: Color?
     
-    private var opacity: CGFloat = 1
+    private let opacity: CGFloat
     
     // MARK: - Initializer
     
@@ -83,14 +83,12 @@ public struct GlassButtonStyle: ButtonStyle {
     /// // Prominent capsule button for primary actions
     /// GlassButtonStyle(shape: .capsule, prominent: true)
     /// ```
-    public init(
-        shape: BackgroundShape = .roundedRect(cornerRadius: 12),
-        prominent: Bool = false
-    ) {
+    init(shape: BackgroundShape = .roundedRect(cornerRadius: 12), prominent: Bool = false, tint: Color? = nil, opacity: CGFloat = 0.8) {
         self.shape = shape
         self.prominent = prominent
+        self.tint = tint
+        self.opacity = opacity
     }
-    
     
     /// Applies a custom tint color to the glass button style.
     ///
@@ -114,24 +112,79 @@ public struct GlassButtonStyle: ButtonStyle {
     /// // Brand color for prominent button
     /// GlassButtonStyle(prominent: true).tint(.orange)
     /// ```
-    public func tint(_ tint: Color?) -> Self {
-        var copy = self
-        copy.tint = tint
-        return copy
-    }
-    
-    public func glassOpacity(_ opacity: CGFloat) -> Self {
-        var copy = self
-        copy.opacity = opacity
-        return copy
-    }
+//    public func tint(_ tint: Color?) -> Self {
+//        var copy = self
+//        copy.tint = tint
+//        return copy
+//    }
+//    
+//    public func glassOpacity(_ opacity: CGFloat) -> Self {
+//        var copy = self
+//        copy.opacity = opacity
+//        return copy
+//    }
     
     /// The effective color used for prominent button styling.
     /// Returns the custom tint if provided, otherwise falls back to the system accent color.
     private var prominentColor: Color {
         tint ?? .accentColor
     }
+    
+    // MARK: - ButtonStyle Protocol
+    
+    /// Creates the styled button content with platform-appropriate glass effects.
+    ///
+    /// Custom glass rendering using the `.liquidGlass()`
+    /// modifier, providing consistent visual appearance across all supported platforms.
+    ///
+    /// The implementation automatically handles:
+    /// - Press state feedback with color adjustments
+    /// - Hover effects for supported platforms
+    /// - Tint color application and prominence styling
+    /// - Shape-specific rendering optimizations
+    ///
+    /// - Parameter configuration: The button configuration containing label and interaction state.
+    /// - Returns: A view representing the styled button with glass effects applied.
+    public func makeBody(configuration: Configuration) -> some View {
+        let tintColor: Color? = configuration.isPressed ? Color.secondary.opacity(0.2) : (prominent ? prominentColor : nil)
+        // Use custom glass background for earlier platforms
+        configuration.label
+            .padding(5)
+            .buttonStyle(.plain)
+            .liquidGlass(shape: shape, opacity: opacity, tint: tintColor, hoverEffect: !configuration.isPressed)
+            .animation(.default, value: configuration.isPressed)
+    }
+}
 
+fileprivate struct GlassButtonMidifier: ViewModifier {
+    
+    // MARK: - Properties
+    
+    /// The background shape for the button.
+    private let shape: BackgroundShape
+    
+    /// Whether to use the prominent glass style (more visible/emphasized).
+    private let prominent: Bool
+    
+    /// Optional tint color for customizing the glass appearance.
+    /// When `nil`, uses the system accent color for prominent styles.
+    private let tint: Color?
+    
+    private let opacity: CGFloat
+    
+    /// The effective color used for prominent button styling.
+    /// Returns the custom tint if provided, otherwise falls back to the system accent color.
+    private var prominentColor: Color {
+        tint ?? .accentColor
+    }
+    
+    init(shape: BackgroundShape, prominent: Bool, tint: Color? = nil, opacity: CGFloat) {
+        self.shape = shape
+        self.prominent = prominent
+        self.tint = tint
+        self.opacity = opacity
+    }
+    
     // MARK: - Private Helpers
     
     /// Applies the appropriate system glass button style for Platform 26+.
@@ -145,26 +198,26 @@ public struct GlassButtonStyle: ButtonStyle {
     ///
     @ViewBuilder
     @available(macOS 26.0, iOS 26.0, watchOS 26.0, visionOS 26.0, tvOS 26.0, *)
-    private func systemGlassButton(label: Configuration.Label) -> some View {
-        #if !os(visionOS)
+    private func systemGlassButton(content: Content) -> some View {
+#if !os(visionOS)
         if prominent {
-            label
+            content
                 .buttonStyle(.glassProminent)
                 .tint(prominentColor)
         } else {
-            label.buttonStyle(.glass)
+            content.buttonStyle(.glass)
         }
-        #else
+#else
         if prominent {
             if prominent {
-                label
+                content
                     .buttonStyle(.borderedProminent)
                     .tint(prominentColor)
             } else {
-                label
+                content
             }
         }
-        #endif
+#endif
     }
     
     /// Applies system button border shapes for Platform 14+.
@@ -182,45 +235,29 @@ public struct GlassButtonStyle: ButtonStyle {
             content.buttonBorderShape(.roundedRectangle(radius: cornerRadius))
         case .circle:
             content
-//                .buttonBorderShape(.circle)
+                .buttonBorderShape(.circle)
         case .capsule:
             content.buttonBorderShape(.capsule)
         }
     }
-
-    // MARK: - ButtonStyle Protocol
     
-    /// Creates the styled button content with platform-appropriate glass effects.
-    ///
-    /// This method provides adaptive rendering based on the target platform:
-    ///
-    /// **Platform 26+**: Uses native system glass button styles (`.glass`, `.glassProminent`)
-    /// with automatic shape mapping and tint application for optimal performance.
-    ///
-    /// **Earlier Platforms**: Falls back to custom glass rendering using the `.liquidGlass()`
-    /// modifier, providing consistent visual appearance across all supported platforms.
-    ///
-    /// The implementation automatically handles:
-    /// - Press state feedback with color adjustments
-    /// - Hover effects for supported platforms
-    /// - Tint color application and prominence styling
-    /// - Shape-specific rendering optimizations
-    ///
-    /// - Parameter configuration: The button configuration containing label and interaction state.
-    /// - Returns: A view representing the styled button with glass effects applied.
-    public func makeBody(configuration: Configuration) -> some View {
+    func body(content: Content) -> some View {
         if #available(macOS 26.0, iOS 26.0, watchOS 26.0, visionOS 26.0, tvOS 26.0, *) {
             // Use system glass button styles on Platform 26+
-            applySystemButtonShape(to: systemGlassButton(label: configuration.label))
+            applySystemButtonShape(to: systemGlassButton(content: content))
         } else {
-            let tintColor: Color? = configuration.isPressed ? Color.secondary.opacity(0.2) : (prominent ? prominentColor : nil)
-            // Use custom glass background for earlier platforms
-            configuration.label
-                .buttonStyle(.plain)
-                .liquidGlass(shape: shape, opacity: opacity, tint: tintColor, hoverEffect: !configuration.isPressed)
+            content
+                .buttonStyle(GlassButtonStyle(shape: shape, prominent: prominent, tint: tint, opacity: opacity))
         }
     }
 }
+
+public extension Button {
+    func glassStyleButton(shape: BackgroundShape = .roundedRect(cornerRadius: 12), prominent: Bool = false, tint: Color? = nil, opacity: CGFloat = 0.8) -> some View {
+        self.modifier(GlassButtonMidifier(shape: shape, prominent: prominent, tint: tint, opacity: opacity))
+    }
+}
+
 
 #Preview("Glass Button Styles") {
     VStack(spacing: 20) {
@@ -239,9 +276,9 @@ public struct GlassButtonStyle: ButtonStyle {
         .buttonStyle(
             GlassButtonStyle(
                 shape: .roundedRect(cornerRadius: 16),
-                prominent: true
+                prominent: true,
+                tint: .blue
             )
-            .tint(.blue)
         )
         
         // Circular button
